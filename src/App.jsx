@@ -6,6 +6,26 @@ import {
   Star, Plus, Minus, X, AlertTriangle, CheckCircle, Terminal, Compass, MessageSquare
 } from "lucide-react";
 
+import {
+  fetchMoviesAndReviewsApi,
+  fetchAdminTransactionsApi,
+  fetchVimeoApi,
+  createCheckoutApi,
+  submitReviewApi
+} from "./services/apiService";
+
+import useMovies from "./hooks/useMovies";
+import useCart from "./hooks/useCart";
+import useAuth from "./hooks/useAuth";
+import useDevConsole from "./hooks/useDevConsole";
+
+import ProductionsPage from "./pages/ProductionsPage";
+import BlogPage from "./pages/BlogPage";
+import MerchPage from "./pages/MerchPage";
+
+import HomeCategories from "./components/HomeCategories";
+import FeaturedMovieSection from "./components/FeaturedMovieSection";
+import ReviewsSection from "./components/reviews/ReviewsSection";
 import Navbar, { RocketLogo } from "./components/Navbar";
 import Hero from "./components/Hero";
 import CheckoutSandbox from "./components/CheckoutSandbox";
@@ -18,48 +38,36 @@ export default function App() {
   // Data States
   const [movies, setMovies] = useState([]);
   const [reviews, setReviews] = useState([]);
-  const [unlockedMovies, setUnlockedMovies] = useState([]);
-  
-  // Cart States
-  const [cart, setCart] = useState([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  
-  // Modals & Detail States
-  const [selectedMovie, setSelectedMovie] = useState(null);
-  const [activeVideo, setActiveVideo] = useState(null);
-  const [vimeoDetails, setVimeoDetails] = useState(null);
-  const [vimeoLoading, setVimeoLoading] = useState(false);
-  const [cinemaMode, setCinemaMode] = useState(false);
   
   // Active Interactive Sandbox Payment Flow
   const [activeSandboxUrl, setActiveSandboxUrl] = useState(null);
   const [sandboxItemTitle, setSandboxItemTitle] = useState("");
   const [sandboxPrice, setSandboxPrice] = useState(0);
-
-  // User Authentication State (Simulated + LocalStorage)
-  const [userEmail, setUserEmail] = useState(null);
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-  const [loginError, setLoginError] = useState("");
-  const [loginSuccess, setLoginSuccess] = useState(false);
-
+  
   // Direct Submission States (Reviews, Contacts)
   const [reviewName, setReviewName] = useState("");
   const [reviewMovie, setReviewMovie] = useState("");
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState("");
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
-
+  
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactMessage, setContactMessage] = useState("");
   const [contactSent, setContactSent] = useState(false);
-
+  
   // System API Logger Console (Developers panel)
-  const [isDevConsoleOpen, setIsDevConsoleOpen] = useState(false);
-  const [systemLogs, setSystemLogs] = useState([]);
-  const [backendTransactions, setBackendTransactions] = useState([]);
-
+  const {
+    isDevConsoleOpen,
+    setIsDevConsoleOpen,
+    systemLogs,
+    setSystemLogs,
+    backendTransactions,
+    setBackendTransactions,
+    addLog,
+    clearLogs,
+  } = useDevConsole();
+  
   // Merchandising Default List (Aligned with server)
   const merchItems = [
     { id: "remera-sombras", name: "Remera 'Cine de Sombras'", price: 15600, category: "indumentaria", image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800", description: "Algodón peinado premium, estampa cinemática en serigrafía." },
@@ -67,19 +75,19 @@ export default function App() {
     { id: "totebag-director", name: "Tote Bag Director's Edition", price: 8500, category: "accesorios", image: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=800", description: "Lienzo super reforzado con bolsillo interno para ópticas o libretas." },
     { id: "membresia-anual", name: "Pase Premium Anual (Abono)", price: 42000, category: "membresias", image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&q=80&w=800", description: "Acceso ilimitado a películas y estrenos exclusivos online por 12 meses." }
   ];
-
+  
   // Load Data on Initial Render
   useEffect(() => {
     fetchMoviesAndReviews();
     fetchAdminTransactions();
-
+    
     // Load active session and unlocked items
     const savedUser = localStorage.getItem("capsulastudios_user");
     if (savedUser) {
       setUserEmail(savedUser);
       addLog(`Sesión de usuario restaurada: ${savedUser}`);
     }
-
+    
     const savedUnlocked = localStorage.getItem("capsulastudios_unlocked");
     if (savedUnlocked) {
       try {
@@ -88,7 +96,7 @@ export default function App() {
         // Fallback
       }
     }
-
+    
     // Capture payment status params from fallback back_urls
     const params = new URLSearchParams(window.location.search);
     const successItem = params.get("item");
@@ -100,62 +108,17 @@ export default function App() {
       }
     }
   }, []);
-
-  const addLog = (message) => {
-    const time = new Date().toLocaleTimeString();
-    setSystemLogs(prev => [`[${time}] ${message}`, ...prev.slice(0, 49)]);
-  };
-
-  const fetchMoviesAndReviews = async () => {
-    try {
-      addLog("Llamando a la API local /api/movies...");
-      const res = await fetch("/api/movies");
-      const data = await res.json();
-      setMovies(data.movies || []);
-      setReviews(data.reviews || []);
-      addLog(`Películas (${data.movies?.length || 0}) y Reseñas (${data.reviews?.length || 0}) cargadas exitosamente.`);
-    } catch (err) {
-      addLog(`Error al conectar con el servidor backend: ${err.message}`);
-    }
-  };
-
-  const fetchAdminTransactions = async () => {
-    try {
-      const res = await fetch("/api/admin/transactions");
-      const data = await res.json();
-      setBackendTransactions(data.transactions || []);
-    } catch (err) {
-      // Slid silently
-    }
-  };
-
-  const handleFetchVimeo = async (vimeoId) => {
-    setVimeoLoading(true);
-    setVimeoDetails(null);
-    addLog(`Proxying Vimeo API request para Video ID: ${vimeoId}...`);
-    try {
-      const res = await fetch(`/api/vimeo/${vimeoId}`);
-      const data = await res.json();
-      setVimeoDetails(data);
-      addLog(`Respuesta Vimeo recabada: Configurado=${data.vimeoConfigured ? "SÍ" : "NO (Simulado)"}`);
-    } catch (err) {
-      addLog(`Error solicitando Vimeo API proxy: ${err.message}`);
-    } finally {
-      setVimeoLoading(false);
-    }
-  };
-
+  
   // Checkout Handler via MercadoPago
   const triggerCheckout = async (title, price, isMerch = false, itemId = "") => {
     addLog(`Iniciando preferencia de Mercado Pago de $${price} ARS para "${title}"...`);
     try {
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, price, isMerch, itemId })
+      const data = await createCheckoutApi({
+        title,
+        price,
+        isMerch,
+        itemId
       });
-
-      const data = await response.json();
       addLog(`Preferencia creada. ID: ${data.id || "N/A"}. Envío directo a init_point.`);
 
       if (data.init_point) {
@@ -175,13 +138,6 @@ export default function App() {
     }
   };
 
-  const unlockMovieLocal = (movieId) => {
-    const updated = [...unlockedMovies, movieId];
-    setUnlockedMovies(updated);
-    localStorage.setItem("capsulastudios_unlocked", JSON.stringify(updated));
-    addLog(`Película desbloqueada con éxito para streaming: ${movieId}`);
-  };
-
   const handleSandboxSuccess = (itemTitle, price) => {
     addLog(`Pago aprobado en Sandbox de pruebas: "${itemTitle}" por $${price}`);
     
@@ -196,52 +152,76 @@ export default function App() {
     setActiveSandboxUrl(null);
     fetchAdminTransactions();
   };
+  
+  // Modals & Detail States
+  const {
+    selectedMovie,
+    setSelectedMovie,
+    activeVideo,
+    setActiveVideo,
+    vimeoDetails,
+    vimeoLoading,
+    cinemaMode,
+    setCinemaMode,
+    unlockedMovies,
+    unlockMovieLocal,
+    handlePlayMovie,
+  } = useMovies({ addLog });
 
-  // Cart Functions
-  const addToCart = (item) => {
-    const existingIndex = cart.findIndex(c => c.item.id === item.id);
-    if (existingIndex > -1) {
-      const updated = [...cart];
-      updated[existingIndex].quantity += 1;
-      setCart(updated);
-    } else {
-      setCart([...cart, { item, quantity: 1 }]);
+  const {
+    cart,
+    setCart,
+    isCartOpen,
+    setIsCartOpen,
+    addToCart,
+    updateCartQuantity,
+    removeFromCart,
+    clearCart,
+    cartTotal,
+    handleCheckoutCart,
+  } = useCart({
+    addLog,
+    triggerCheckout,
+  });
+
+  const {
+    userEmail,
+    setUserEmail,
+    loginEmail,
+    setLoginEmail,
+    loginPassword,
+    setLoginPassword,
+    loginError,
+    loginSuccess,
+    handleLoginSubmit,
+    handleLogout,
+  } = useAuth({ addLog });
+  
+  const fetchMoviesAndReviews = async () => {
+    try {
+      addLog("Llamando a la API local /api/movies...");
+      
+      const data = await fetchMoviesAndReviewsApi();
+      
+      setMovies(data.movies || []);
+      setReviews(data.reviews || []);
+      
+      addLog(
+        `Películas (${data.movies?.length || 0}) y Reseñas (${data.reviews?.length || 0}) cargadas exitosamente.`
+      );
+    } catch (err) {
+      addLog(`Error al conectar con el servidor backend: ${err.message}`);
     }
-    
-    addLog(`Item añadido al carrito: ${item.name}`);
-    
-    // Auto-open for fast user confirmation
-    setIsCartOpen(true);
   };
 
-  const updateCartQuantity = (id, delta) => {
-    const updated = cart.map(c => {
-      if (c.item.id === id) {
-        const newQ = c.quantity + delta;
-        return { ...c, quantity: newQ > 0 ? newQ : 1 };
-      }
-      return c;
-    });
-    setCart(updated);
-  };
+  const fetchAdminTransactions = async () => {
+    try {
+      const data = await fetchAdminTransactionsApi();
 
-  const removeFromCart = (id) => {
-    setCart(cart.filter(c => c.item.id !== id));
-    addLog(`Item removido del carrito: ${id}`);
-  };
-
-  const clearCart = () => {
-    setCart([]);
-    addLog("Carrito de compras vaciado con éxito.");
-  };
-
-  const handleCheckoutCart = () => {
-    if (cart.length === 0) return;
-    const total = cart.reduce((acc, c) => acc + c.item.price * c.quantity, 0);
-    const descStr = cart.map(c => `${c.item.name} x${c.quantity}`).join(", ");
-    
-    setIsCartOpen(false);
-    triggerCheckout(`Merchandising: ${descStr.substring(0, 40)}...`, total, true, "merch-cart");
+      setBackendTransactions(data.transactions || []);
+    } catch (err) {
+      // silent
+    }
   };
 
   // Submission Management
@@ -250,15 +230,11 @@ export default function App() {
     if (!reviewName || !reviewMovie || !reviewComment) return;
 
     try {
-      const res = await fetch("/api/reviews", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          movie: reviewMovie,
-          user: reviewName,
-          rating: reviewRating,
-          comment: reviewComment
-        })
+      const res = await submitReviewApi({
+        movie: reviewMovie,
+        user: reviewName,
+        rating: reviewRating,
+        comment: reviewComment
       });
 
       if (res.ok) {
@@ -293,62 +269,6 @@ export default function App() {
     }, 4000);
   };
 
-  // Simulated Login/Supabase Integration
-  const handleLoginSubmit = (e) => {
-    e.preventDefault();
-    if (!loginEmail.includes("@")) {
-      setLoginError("Por favor ingrese un correo válido.");
-      return;
-    }
-    if (loginPassword.length < 4) {
-      setLoginError("La contraseña debe tener al menos 4 caracteres.");
-      return;
-    }
-
-    setLoginError("");
-    setLoginSuccess(true);
-    localStorage.setItem("capsulastudios_user", loginEmail);
-    setUserEmail(loginEmail);
-    addLog(`Sesión iniciada con éxito para el usuario: ${loginEmail}`);
-
-    setTimeout(() => {
-      setLoginSuccess(false);
-      setLoginEmail("");
-      setLoginPassword("");
-      setCurrentTab("inicio");
-    }, 1500);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("capsulastudios_user");
-    setUserEmail(null);
-    addLog("Sesión de usuario cerrada.");
-  };
-
-  // Active Movie Player trigger
-  const handlePlayMovie = (movie) => {
-    const isUnlocked = unlockedMovies.includes(movie.id) || movie.price === 0;
-    if (!isUnlocked) {
-      addLog(`Intento de reproducir película restringida: ${movie.title}. Se requiere pase.`);
-      setSelectedMovie(movie); // Open detailed view to prompt checkout
-      return;
-    }
-
-    setActiveVideo({
-      url: movie.videoUrl,
-      title: movie.title,
-      id: movie.id
-    });
-    
-    if (movie.vimeoId) {
-      handleFetchVimeo(movie.vimeoId);
-    }
-    addLog(`Iniciando reproducción del video: ${movie.title}`);
-  };
-
-  // Calculated totals
-  const cartTotal = cart.reduce((acc, c) => acc + c.item.price * c.quantity, 0);
-
   return (
     <div className={`min-h-screen bg-[#050505] text-[#F5F5F5] font-sans relative ${cinemaMode ? "overflow-hidden" : ""}`}>
       
@@ -379,512 +299,59 @@ export default function App() {
             }} />
 
             {/* Content Cards Section */}
-            <section className="w-full flex flex-col md:flex-row gap-[1px] bg-white/10 select-none">
-              
-              {/* Card 1: Películas */}
-              <div 
-                onClick={() => {
-                  setMovieFilter("pelicula");
-                  setCurrentTab("producciones");
-                  addLog("Redireccionado a Películas desde Cartas Destacadas.");
-                }}
-                className="flex-1 min-h-[280px] relative group overflow-hidden bg-[#161616] cursor-pointer"
-              >
-                <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300 z-10"></div>
-                <div 
-                  className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
-                  style={{ backgroundImage: `url('https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&q=80&w=600')` }}
-                />
-                <div className="absolute bottom-8 left-8 z-20">
-                  <div className="w-10 h-[1px] bg-[#9D0208] mb-3"></div>
-                  <h2 className="text-3xl font-sans font-black uppercase tracking-tighter text-white">Películas</h2>
-                  <p className="text-xs text-[#8E8E8E] uppercase tracking-widest mt-1 italic">LARGOMETRAJES PREMIADOS</p>
-                </div>
-              </div>
-
-              {/* Card 2: Cortometrajes */}
-              <div 
-                onClick={() => {
-                  setMovieFilter("corto");
-                  setCurrentTab("producciones");
-                  addLog("Redireccionado a Cortometrajes desde Cartas Destacadas.");
-                }}
-                className="flex-1 min-h-[280px] relative group overflow-hidden bg-[#161616] cursor-pointer"
-              >
-                <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300 z-10"></div>
-                <div 
-                  className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
-                  style={{ backgroundImage: `url('https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&q=80&w=600')` }}
-                />
-                <div className="absolute bottom-8 left-8 z-20">
-                  <div className="w-10 h-[1px] bg-[#9D0208] mb-3"></div>
-                  <h2 className="text-3xl font-sans font-black uppercase tracking-tighter text-white">Cortos</h2>
-                  <p className="text-xs text-[#8E8E8E] uppercase tracking-widest mt-1 italic">NARRATIVAS COMPACTAS</p>
-                </div>
-              </div>
-
-              {/* Card 3: Merch */}
-              <div 
-                onClick={() => {
-                  setCurrentTab("merch");
-                }}
-                className="flex-1 min-h-[280px] relative group overflow-hidden bg-[#161616] cursor-pointer"
-              >
-                <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300 z-10"></div>
-                <div 
-                  className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
-                  style={{ backgroundImage: `url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=600')` }}
-                />
-                <div className="absolute bottom-8 left-8 z-20">
-                  <div className="w-10 h-[1px] bg-[#9D0208] mb-3"></div>
-                  <h2 className="text-3xl font-sans font-black uppercase tracking-tighter text-white">Merch</h2>
-                  <p className="text-xs text-[#8E8E8E] uppercase tracking-widest mt-1 italic">COLECCIÓN LIMITADA</p>
-                </div>
-              </div>
-            </section>
+            <HomeCategories
+              setMovieFilter={setMovieFilter}
+              setCurrentTab={setCurrentTab}
+              addLog={addLog}
+            />
 
             {/* Featured Selection Highlight Block */}
-            <section className="max-w-7xl mx-auto px-6 py-20">
-              <div className="flex flex-col lg:flex-row bg-[#161616]/60 border border-[#222] rounded-2xl overflow-hidden shadow-2xl relative">
-                <div className="absolute top-4 right-4 bg-black/70 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] uppercase font-mono tracking-widest px-3 py-1 rounded font-bold">
-                  Súper Estreno Exclusivo
-                </div>
-                
-                {/* Poster column */}
-                <div className="w-full lg:w-2/5 h-[340px] lg:h-auto relative">
-                  <img 
-                    src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=800" 
-                    alt="El Eco de las Sombras" 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#050505] via-transparent to-transparent opacity-80" />
-                </div>
-
-                {/* Info and action column */}
-                <div className="w-full lg:w-3/5 p-8 lg:p-12 flex flex-col justify-between">
-                  <div>
-                    <span className="text-xs text-[#9D0208] tracking-widest uppercase font-mono font-bold block mb-2">Largometraje Destacado</span>
-                    <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">El Eco de las Sombras</h2>
-                    
-                    <div className="flex flex-wrap items-center gap-4 text-xs text-[#8E8E8E] mb-6">
-                      <span className="bg-[#9D0208]/10 text-[#9D0208] border border-[#9D0208]/20 px-2 py-0.5 rounded font-bold font-mono">Thriller Psicológico</span>
-                      <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> 1h 42min</span>
-                      <span className="flex items-center gap-1"><Star className="w-3.5 h-3.5 text-[#D4AF37] fill-[#D4AF37]" /> 4.9 Puntos</span>
-                      <span>2025</span>
-                    </div>
-
-                    <p className="text-sm text-[#8E8E8E] leading-relaxed mb-6">
-                      En las profundidades de un faro abandonado, un cineasta obsesionado descubre cintas de celuloide que documentan sucesos que aún no han ocurrido. Cada proyección consume un pedazo de su propia realidad.
-                    </p>
-
-                    <div className="border-t border-[#222] pt-6 mb-6">
-                      <div className="grid grid-cols-2 gap-4 text-xs">
-                        <div>
-                          <span className="text-[#8E8E8E] block">Director</span>
-                          <span className="text-white font-semibold">Juan Martín</span>
-                        </div>
-                        <div>
-                          <span className="text-[#8E8E8E] block">Elenco</span>
-                          <span className="text-white font-semibold">Ricardo D., Sofía M.</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row items-center gap-4">
-                    <button
-                      onClick={() => {
-                        const target = movies.find(m => m.id === "eco-sombras");
-                        if (target) {
-                          handlePlayMovie(target);
-                        }
-                      }}
-                      className="w-full sm:w-auto px-6 py-3 bg-[#9D0208] hover:bg-[#b0030a] text-white text-xs tracking-wider uppercase font-bold rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <Play className="w-4 h-4 fill-white" /> Reproducir Película
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        const target = movies.find(m => m.id === "eco-sombras");
-                        if (target) {
-                          setSelectedMovie(target);
-                        }
-                      }}
-                      className="w-full sm:w-auto px-6 py-3 bg-[#161616] hover:bg-[#222] text-white border border-[#2d2d2d] text-xs tracking-wider uppercase font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <Info className="w-4 h-4" /> Ver Detalles Clave
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </section>
+            <FeaturedMovieSection
+              movies={movies}
+              handlePlayMovie={handlePlayMovie}
+              setSelectedMovie={setSelectedMovie}
+            />
 
             {/* Testimonials and Community Reviews */}
-            <section className="bg-black py-20 px-6 border-y border-[#161616]">
-              <div className="max-w-7xl mx-auto">
-                <div className="text-center max-w-2xl mx-auto mb-16">
-                  <span className="text-xs text-[#D4AF37] uppercase tracking-[0.3em] font-mono block mb-2">La Tribuna Crítica</span>
-                  <h2 className="text-3xl sm:text-4xl text-white font-extrabold pb-4">Reseñas de la Comunidad</h2>
-                  <div className="w-16 h-[2px] bg-[#9D0208] mx-auto mt-2" />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-                  {reviews.map((rev) => (
-                    <div 
-                      key={rev.id} 
-                      className="bg-[#161616]/40 border border-[#222] hover:border-[#9D0208]/40 transition-all p-6 rounded-xl flex flex-col justify-between"
-                    >
-                      <div>
-                        {/* Rating representation */}
-                        <div className="flex items-center gap-1 mb-4">
-                          {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={`w-3.5 h-3.5 ${
-                                i < rev.rating ? "text-[#D4AF37] fill-[#D4AF37]" : "text-[#333]"
-                              }`} 
-                            />
-                          ))}
-                        </div>
-                        <p className="text-sm italic text-[#8E8E8E] mb-6 leading-relaxed">
-                          "{rev.comment}"
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-between border-t border-[#222]/50 pt-4 mt-auto">
-                        <span className="text-xs text-white font-medium">{rev.user}</span>
-                        <span className="text-[10px] text-[#8E8E8E] font-mono uppercase tracking-widest">{rev.movie}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Submitting Review form box */}
-                <div className="max-w-xl mx-auto bg-[#161616] border border-[#252525] rounded-2xl p-6 sm:p-8 shadow-xl">
-                  <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4 text-[#D4AF37]" /> Deja tu Crítica Profesional
-                  </h3>
-                  <p className="text-xs text-[#8E8E8E] mb-6">Tu valoración aporta enormemente a la difusión del cine de autor independiente.</p>
-
-                  <form onSubmit={handleReviewSubmit} className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs uppercase tracking-wider text-[#8E8E8E] mb-1 font-mono">Nombre o Seudónimo</label>
-                        <input
-                          type="text"
-                          required
-                          value={reviewName}
-                          onChange={(e) => setReviewName(e.target.value)}
-                          placeholder="Cinefilo_2026"
-                          className="w-full bg-[#050505] border border-[#2d2d2d] focus:border-[#9D0208] text-[#F5F5F5] placeholder-gray-600 rounded-lg p-2.5 text-xs outline-none transition"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs uppercase tracking-wider text-[#8E8E8E] mb-1 font-mono">Obra Audiovisual</label>
-                        <select
-                          value={reviewMovie}
-                          onChange={(e) => setReviewMovie(e.target.value)}
-                          required
-                          className="w-full bg-[#050505] border border-[#2d2d2d] focus:border-[#9D0208] text-[#F5F5F5] rounded-lg p-2.5 text-xs outline-none transition cursor-pointer"
-                        >
-                          <option value="">Selecciona una producción...</option>
-                          {movies.map(m => (
-                            <option key={m.id} value={m.title}>{m.title}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs uppercase tracking-wider text-[#8E8E8E] mb-1 font-mono">Valoración (Estrellas)</label>
-                      <div className="flex items-center gap-2">
-                        {[1, 2, 3, 4, 5].map((num) => (
-                          <button
-                            type="button"
-                            key={num}
-                            onClick={() => setReviewRating(num)}
-                            className="p-1 hover:scale-110 transition-transform cursor-pointer"
-                          >
-                            <Star 
-                              className={`w-5 h-5 ${
-                                num <= reviewRating ? "text-[#D4AF37] fill-[#D4AF37]" : "text-[#333]"
-                              }`} 
-                            />
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs uppercase tracking-wider text-[#8E8E8E] mb-1 font-mono">Tu crítica</label>
-                      <textarea
-                        required
-                        rows={3}
-                        value={reviewComment}
-                        onChange={(e) => setReviewComment(e.target.value)}
-                        placeholder="El montaje me pareció soberbio, y el uso dramático de la fotografía..."
-                        className="w-full bg-[#050505] border border-[#2d2d2d] focus:border-[#9D0208] text-[#F5F5F5] placeholder-gray-600 rounded-lg p-2.5 text-xs outline-none transition"
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={reviewSubmitted}
-                      className="w-full py-2.5 bg-[#9D0208] hover:bg-[#b0030a] text-white text-xs uppercase font-bold tracking-widest rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      {reviewSubmitted ? (
-                        <>
-                          <Check className="w-4 h-4 text-emerald-400" /> ¡Enviado Exitosamente!
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-3.5 h-3.5" /> Publicar Comentario
-                        </>
-                      )}
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </section>
+            <ReviewsSection
+              reviews={reviews}
+              movies={movies}
+              reviewName={reviewName}
+              setReviewName={setReviewName}
+              reviewMovie={reviewMovie}
+              setReviewMovie={setReviewMovie}
+              reviewRating={reviewRating}
+              setReviewRating={setReviewRating}
+              reviewComment={reviewComment}
+              setReviewComment={setReviewComment}
+              reviewSubmitted={reviewSubmitted}
+              handleReviewSubmit={handleReviewSubmit}
+            />
           </div>
         )}
 
         {/* TAB: PRODUCCIONES */}
         {currentTab === "producciones" && (
-          <section className="max-w-7xl mx-auto px-6 py-12">
-            <div className="flex flex-col md:flex-row items-baseline justify-between gap-4 border-b border-[#222] pb-6 mb-12">
-              <div>
-                <span className="text-xs text-[#9D0208] uppercase tracking-[0.25em] font-mono block mb-1">Catálogo Exclusivo</span>
-                <h2 className="text-3xl sm:text-4xl text-white font-extrabold">Nuestras Producciones</h2>
-              </div>
-              
-              <div className="flex items-center gap-2 bg-[#161616] p-1.5 rounded-xl border border-[#212121]">
-                {["todos", "pelicula", "corto"].map((t) => (
-                  <button
-                    key={t}
-                    onClick={() => setMovieFilter(t)}
-                    className={`px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer ${
-                      movieFilter === t
-                        ? "bg-[#9D0208] text-white"
-                        : "text-[#8E8E8E] hover:text-[#F5F5F5]"
-                    }`}
-                  >
-                    {t === "todos" ? "Todos" : t === "pelicula" ? "Películas" : "Cortometrajes"}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Filtered Movie Catalogue list */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {movies
-                .filter(m => movieFilter === "todos" || m.type === movieFilter)
-                .map((movie) => {
-                  const isUnlocked = unlockedMovies.includes(movie.id) || movie.price === 0;
-                  return (
-                    <motion.div
-                      layout
-                      key={movie.id}
-                      className="bg-[#161616] border border-[#222] hover:border-[#9D0208]/40 rounded-xl overflow-hidden shadow-xl hover:translate-y-[-4px] transition-all duration-300 group flex flex-col justify-between"
-                    >
-                      {/* Poster Image Container */}
-                      <div className="relative h-72 sm:h-80 overflow-hidden bg-black">
-                        <img
-                          src={movie.poster}
-                          alt={movie.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
-
-                        {/* Lock / Unlock Overlay Badge */}
-                        <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                          {isUnlocked ? (
-                            <span className="px-2.5 py-1 bg-emerald-600/90 text-white rounded text-[10px] font-mono uppercase tracking-widest font-bold flex items-center gap-1 z-10 shadow">
-                              <Unlock className="w-3 h-3" /> Acceso Libre
-                            </span>
-                          ) : (
-                            <span className="px-2.5 py-1 bg-[#9D0208]/90 text-white rounded text-[10px] font-mono uppercase tracking-widest font-bold flex items-center gap-1 z-10 shadow">
-                              <Lock className="w-3 h-3 text-[#D4AF37]" /> Alquiler Digital
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Hover Quick Action Play */}
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 z-10">
-                          {isUnlocked ? (
-                            <button
-                              onClick={() => handlePlayMovie(movie)}
-                              className="p-4 bg-[#9D0208] hover:bg-[#b0030a] rounded-full text-white transform scale-90 group-hover:scale-100 transition-all cursor-pointer"
-                            >
-                              <Play className="w-6 h-6 fill-white" />
-                            </button>
-                          ) : (
-                            <div className="flex flex-col gap-2 items-center px-4 text-center">
-                              <span className="text-xs uppercase tracking-widest text-[#D4AF37] font-bold">Un solo pago de</span>
-                              <span className="text-xl text-white font-mono font-bold">${movie.price.toLocaleString('es-AR')} ARS</span>
-                              <button
-                                onClick={() => triggerCheckout(movie.title, movie.price, false, movie.id)}
-                                className="px-4 py-2 mt-2 bg-white text-black hover:bg-[#D4AF37] hover:text-black rounded text-[11px] font-bold uppercase tracking-wider transition-colors cursor-pointer"
-                              >
-                                Obtener Acceso
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Movie Information metadata */}
-                      <div className="p-5 flex-grow flex flex-col justify-between">
-                        <div>
-                          <div className="flex items-center justify-between gap-2 mb-1">
-                            <span className="text-[10px] text-[#D4AF37] tracking-widest uppercase font-mono font-bold">
-                              {movie.type === "pelicula" ? "Largometraje" : "Cortometraje"}
-                            </span>
-                            <span className="text-[10px] text-[#8E8E8E] font-semibold">{movie.duration}</span>
-                          </div>
-                          <h3 className="text-base font-bold text-white line-clamp-1 mb-2">{movie.title}</h3>
-                          <p className="text-xs text-[#8E8E8E] line-clamp-2 leading-relaxed mb-4">{movie.synopsis}</p>
-                        </div>
-
-                        {/* Buy / Play Button below */}
-                        <div className="border-t border-[#222] pt-4 mt-auto flex items-center justify-between gap-2">
-                          <button
-                            onClick={() => setSelectedMovie(movie)}
-                            className="text-xs text-[#8E8E8E] hover:text-white transition-colors cursor-pointer flex items-center gap-1 font-semibold"
-                          >
-                            <Info className="w-3.5 h-3.5" /> Ficha Técnica
-                          </button>
-
-                          {isUnlocked ? (
-                            <button
-                              onClick={() => handlePlayMovie(movie)}
-                              className="px-3.5 py-1.5 bg-emerald-700/85 hover:bg-emerald-600 text-white rounded text-xs transition-colors flex items-center gap-1 font-semibold cursor-pointer"
-                            >
-                              <Play className="w-3 h-3 fill-white" /> Reproducir
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => triggerCheckout(movie.title, movie.price, false, movie.id)}
-                              className="px-3.5 py-1.5 bg-[#9D0208] hover:bg-[#b0030a] text-white rounded text-xs transition-colors flex items-center gap-1 font-semibold cursor-pointer shadow-md"
-                            >
-                              <Lock className="w-3 h-3 text-[#D4AF37]" /> Rentar
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-            </div>
-          </section>
+          <ProductionsPage
+            movies={movies}
+            movieFilter={movieFilter}
+            setMovieFilter={setMovieFilter}
+            unlockedMovies={unlockedMovies}
+            handlePlayMovie={handlePlayMovie}
+            triggerCheckout={triggerCheckout}
+            setSelectedMovie={setSelectedMovie}
+          />
         )}
 
         {/* TAB: BLOG */}
-        {currentTab === "blog" && (
-          <section className="max-w-4xl mx-auto px-6 py-12">
-            <div className="text-center mb-16">
-              <span className="text-xs text-[#9D0208] uppercase tracking-[0.3em] font-mono block mb-2">Cuadernos de Rodaje</span>
-              <h2 className="text-3xl sm:text-4xl text-white font-extrabold">Cine Blog Directores</h2>
-              <div className="w-16 h-[2.5px] bg-[#9D0208] mx-auto mt-3" />
-            </div>
-
-            <div className="space-y-12">
-              {/* Blog Post 1 */}
-              <article className="bg-[#161616]/70 border border-[#222] rounded-2xl overflow-hidden p-6 sm:p-8 flex flex-col md:flex-row gap-6 hover:border-[#D4AF37]/35 transition-all">
-                <div className="w-full md:w-1/3 h-48 md:h-auto rounded-xl overflow-hidden bg-black">
-                  <img
-                    src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&q=80&w=800"
-                    alt="Espacio oscuro"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="w-full md:w-2/3 flex flex-col justify-between">
-                  <div>
-                    <span className="text-[10px] text-[#D4AF37] uppercase tracking-wider font-mono font-bold block mb-2">Artículos • Iluminación</span>
-                    <h3 className="text-xl font-bold text-white mb-3">La Estética del Cine de Terror Moderno y el Estigma Neon Noir</h3>
-                    <p className="text-xs text-[#8E8E8E] leading-relaxed mb-4">
-                      ¿Cómo influye la paleta de colores sobre el inconsciente cerebral de nuestro público? En este ensayo técnico, desglosamos el uso del rojo escarlata y el contraste de penumbra profunda, tal como lo empleamos en nuestra próxima gran obra, \"El Eco de las Sombras\", inspirándonos en estéticas legendarias de thriller oscuro.
-                    </p>
-                  </div>
-                  <div className="flex items-center justify-between text-[11px] text-[#8E8E8E] border-t border-[#222]/50 pt-4">
-                    <span>Por Juan Martín (Director)</span>
-                    <span>25 Mayo, 2026</span>
-                  </div>
-                </div>
-              </article>
-
-              {/* Blog Post 2 */}
-              <article className="bg-[#161616]/70 border border-[#222] rounded-2xl overflow-hidden p-6 sm:p-8 flex flex-col md:flex-row gap-6 hover:border-[#D4AF37]/35 transition-all">
-                <div className="w-full md:w-1/3 h-48 md:h-auto rounded-xl overflow-hidden bg-black">
-                  <img
-                    src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800"
-                    alt="Fotografía patagónica"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="w-full md:w-2/3 flex flex-col justify-between">
-                  <div>
-                    <span className="text-[10px] text-[#D4AF37] uppercase tracking-wider font-mono font-bold block mb-2">Producción • Locaciones</span>
-                    <h3 className="text-xl font-bold text-white mb-3">El Desafío Intangible de Grabar Sonido Natural en la Estepa de la Patagonia</h3>
-                    <p className="text-xs text-[#8E8E8E] leading-relaxed mb-4">
-                      Viajar al extremo sur para filmar \"Los Susurros del Viento\" requirió equipamientos de audio nunca antes testeados en vientos de 90 km/h. Lucía Soler describe la travesía técnica necesaria para filtrar el silbido natural y usarlo como una flauta dramática ambiental.
-                    </p>
-                  </div>
-                  <div className="flex items-center justify-between text-[11px] text-[#8E8E8E] border-t border-[#222]/50 pt-4">
-                    <span>Por Lucía Soler (Productores)</span>
-                    <span>18 Mayo, 2026</span>
-                  </div>
-                </div>
-              </article>
-            </div>
-          </section>
-        )}
+        {currentTab === "blog" && <BlogPage />}
 
         {/* TAB: MERCH */}
         {currentTab === "merch" && (
-          <section className="max-w-7xl mx-auto px-6 py-12">
-            <div className="text-center mb-16">
-              <span className="text-xs text-[#9D0208] uppercase tracking-[0.3em] font-mono block mb-2">Exclusiva Boutique</span>
-              <h2 className="text-3xl sm:text-4xl text-white font-extrabold font-sans">Colección de Cineastas</h2>
-              <div className="w-16 h-[2px] bg-[#9D0208] mx-auto mt-3" />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {merchItems.map((item) => (
-                <div 
-                  key={item.id} 
-                  className="bg-[#161616] border border-[#222] rounded-xl overflow-hidden hover:border-[#9D0208]/40 transition-all flex flex-col justify-between group"
-                >
-                  <div className="relative h-64 overflow-hidden bg-black">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute top-3 right-3 bg-black/80 border border-[#333] px-2.5 py-1 rounded text-[11px] font-mono text-[#D4AF37] font-semibold">
-                      ${item.price.toLocaleString('es-AR')}
-                    </div>
-                  </div>
-
-                  <div className="p-5 flex-grow flex flex-col justify-between">
-                    <div>
-                      <span className="text-[10px] uppercase tracking-wider font-mono text-[#8E8E8E] block mb-2">{item.category}</span>
-                      <h3 className="text-base font-bold text-white mb-2 line-clamp-1">{item.name}</h3>
-                      <p className="text-xs text-[#8E8E8E] leading-relaxed line-clamp-2 mb-4">{item.description}</p>
-                    </div>
-
-                    <button
-                      onClick={() => addToCart(item)}
-                      className="w-full py-2 bg-[#101010] hover:bg-[#9D0208] text-[#F5F5F5] hover:text-white border border-[#2d2d2d] hover:border-transparent text-xs font-semibold rounded-lg transition-all cursor-pointer flex items-center justify-center gap-2"
-                    >
-                      <ShoppingCart className="w-3.5 h-3.5" /> Agregar al Carrito
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
+          <MerchPage
+            merchItems={merchItems}
+            addToCart={addToCart}
+          />
         )}
 
         {/* TAB: NOSOTROS */}
