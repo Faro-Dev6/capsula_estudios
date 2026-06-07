@@ -1,0 +1,6 @@
+{
+  "name": "Productora Cine",
+  "description": "Plataforma cinematográfica premium para películas, cortos, merchandising e integración de pagos y streaming.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
