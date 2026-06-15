@@ -22,7 +22,7 @@ export default function HomeCategories({
           className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&q=80&w=600')",
+              "url('https://res.cloudinary.com/dmc9xgwzu/image/upload/c_fill,f_auto,q_80,w_600/v1781375218/poster_delta_ecplap.png')",
           }}
         />
 
@@ -55,7 +55,7 @@ export default function HomeCategories({
           className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&q=80&w=600')",
+              "url('https://res.cloudinary.com/dmc9xgwzu/image/upload/c_fill,f_auto,q_80,w_600/v1781558335/capsula_foto1_prb41c.png')",
           }}
         />
 
@@ -84,7 +84,7 @@ export default function HomeCategories({
           className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=600')",
+              "url('https://res.cloudinary.com/dmc9xgwzu/image/upload/c_fill,f_auto,q_80,w_600/v1781560242/merch_demo_hmxbef.png')",
           }}
         />
 
