@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
-
 import {
   fetchMoviesAndReviewsApi,
   fetchAdminTransactionsApi,
@@ -24,6 +23,7 @@ import VideoPlayer from "./components/VideoPlayer";
 import DevConsole from "./components/DevConsole";
 import MainRouter from "./components/layout/MainRouter";
 import merchItems from "./data/merchItems";
+import CheckoutSandbox from "./components/CheckoutSandbox";
 
 
 export default function App() {
