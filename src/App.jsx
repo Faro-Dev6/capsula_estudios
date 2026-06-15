@@ -1,34 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import {
-  Film,
-  Play,
-  Volume2,
-  ShoppingCart,
-  Lock,
-  Unlock,
-  ArrowRight,
-  Check,
-  Sparkles,
-  Trash2,
-  Send,
-  Mail,
-  MapPin,
-  Phone,
-  Instagram,
-  Github,
-  Info,
-  Clock,
-  Star,
-  Plus,
-  Minus,
-  X,
-  AlertTriangle,
-  CheckCircle,
-  Terminal,
-  Compass,
-  MessageSquare,
-} from "lucide-react";
+
 
 import {
   fetchMoviesAndReviewsApi,
@@ -45,23 +17,14 @@ import useContact from "./hooks/useContact";
 import useReviews from "./hooks/useReviews";
 import useContent from "./hooks/useContent";
 
-import ProductionsPage from "./pages/ProductionsPage";
-import BlogPage from "./pages/BlogPage";
-import MerchPage from "./pages/MerchPage";
-
-import HomeCategories from "./components/HomeCategories";
-import FeaturedMovieSection from "./components/FeaturedMovieSection";
-import ReviewsSection from "./components/reviews/ReviewsSection";
 import Navbar, { RocketLogo } from "./components/Navbar";
-import Hero from "./components/Hero";
-import CheckoutSandbox from "./components/CheckoutSandbox";
-import AboutSection from "./components/sections/AboutSection";
-import ContactSection from "./components/sections/ContactSection";
-import LoginSection from "./components/sections/LoginSection";
 import CartDrawer from "./components/cart/CartDrawer";
 import MovieModal from "./components/MovieModal";
 import VideoPlayer from "./components/VideoPlayer";
 import DevConsole from "./components/DevConsole";
+import MainRouter from "./components/layout/MainRouter";
+import merchItems from "./data/merchItems";
+
 
 export default function App() {
   // ========================
@@ -92,49 +55,6 @@ export default function App() {
   // CONTENT
   // ========================
   const { movies, reviews, fetchMoviesAndReviews } = useContent({ addLog });
-
-  // ========================
-  // MERCH
-  // ========================
-  const merchItems = [
-    {
-      id: "remera-sombras",
-      name: "Remera 'Cine de Sombras'",
-      price: 15600,
-      category: "indumentaria",
-      image:
-        "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800",
-      description: "Algodón peinado premium, estampa cinemática en serigrafía.",
-    },
-    {
-      id: "poster-eco",
-      name: "Poster Oficial Eco de las Sombras",
-      price: 6200,
-      category: "posters",
-      image:
-        "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=800",
-      description:
-        "Tamaño A2 en papel ilustración de 250g con terminación mate.",
-    },
-    {
-      id: "totebag-director",
-      name: "Tote Bag Director's Edition",
-      price: 8500,
-      category: "accesorios",
-      image:
-        "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=800",
-      description: "Lienzo super reforzado con bolsillo interno.",
-    },
-    {
-      id: "membresia-anual",
-      name: "Pase Premium Anual (Abono)",
-      price: 42000,
-      category: "membresias",
-      image:
-        "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&q=80&w=800",
-      description: "Acceso ilimitado por 12 meses.",
-    },
-  ];
 
   // ========================
   // CHECKOUT (DEBE IR ANTES DE useCart)
@@ -293,80 +213,23 @@ export default function App() {
       />
 
       {/* ================= MAIN ROUTER ================= */}
-      <main className="pt-20">
-        {/* ---------- INICIO ---------- */}
-        {currentTab === "inicio" && (
-          <div>
-            <Hero
-              onExplore={(type) => {
-                setMovieFilter(type || "todos");
-                setCurrentTab("producciones");
-              }}
-            />
-
-            <HomeCategories
-              setMovieFilter={setMovieFilter}
-              setCurrentTab={setCurrentTab}
-              addLog={addLog}
-            />
-
-            <FeaturedMovieSection
-              movies={movies}
-              handlePlayMovie={handlePlayMovie}
-              setSelectedMovie={setSelectedMovie}
-            />
-
-            <ReviewsSection
-              reviews={reviews}
-              movies={movies}
-              {...reviewsForm}
-            />
-          </div>
-        )}
-
-        {/* ---------- PRODUCCIONES ---------- */}
-        {currentTab === "producciones" && (
-          <ProductionsPage
-            movies={movies}
-            movieFilter={movieFilter}
-            setMovieFilter={setMovieFilter}
-            unlockedMovies={unlockedMovies}
-            handlePlayMovie={handlePlayMovie}
-            triggerCheckout={triggerCheckout}
-            setSelectedMovie={setSelectedMovie}
-          />
-        )}
-
-        {/* ---------- BLOG ---------- */}
-        {currentTab === "blog" && <BlogPage />}
-
-        {/* ---------- MERCH ---------- */}
-        {currentTab === "merch" && (
-          <MerchPage merchItems={merchItems} addToCart={addToCart} />
-        )}
-
-        {/* ---------- NOSOTROS ---------- */}
-        {currentTab === "nosotros" && <AboutSection />}
-
-        {/* ---------- CONTACTO ---------- */}
-        {currentTab === "contacto" && <ContactSection {...contact} />}
-
-        {/* ---------- LOGIN ---------- */}
-        {currentTab === "login" && (
-          <LoginSection
-            userEmail={userEmail}
-            loginEmail={loginEmail}
-            setLoginEmail={setLoginEmail}
-            loginPassword={loginPassword}
-            setLoginPassword={setLoginPassword}
-            loginError={loginError}
-            loginSuccess={loginSuccess}
-            handleLoginSubmit={handleLoginSubmit}
-            handleLogout={handleLogout}
-            setCurrentTab={setCurrentTab}
-          />
-        )}
-      </main>
+      <MainRouter
+        currentTab={currentTab}
+        setCurrentTab={setCurrentTab}
+        movies={movies}
+        reviews={reviews}
+        movieFilter={movieFilter}
+        setMovieFilter={setMovieFilter}
+        unlockedMovies={unlockedMovies}
+        handlePlayMovie={handlePlayMovie}
+        triggerCheckout={triggerCheckout}
+        setSelectedMovie={setSelectedMovie}
+        merchItems={merchItems}
+        addToCart={addToCart}
+        contact={contact}
+        reviewsForm={reviewsForm}
+        addLog={addLog}
+      />
 
       <CartDrawer
         isCartOpen={isCartOpen}
