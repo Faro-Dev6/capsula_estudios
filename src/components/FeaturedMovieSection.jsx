@@ -5,21 +5,22 @@ export default function FeaturedMovieSection({
   handlePlayMovie,
   setSelectedMovie,
 }) {
-  const target = movies.find((m) => m.id === "eco-sombras");
+  const target = movies.find((m) => m.id === "mision-delta");
 
   return (
     <section className="max-w-7xl mx-auto px-6 py-20">
-      <div className="flex flex-col lg:flex-row bg-[#161616]/60 border border-[#222] rounded-2xl overflow-hidden shadow-2xl relative">
+      <div className="flex flex-col lg:flex-row items-stretch bg-[#161616]/60 border border-[#222] rounded-2xl overflow-hidden shadow-2xl relative">
 
         <div className="absolute top-4 right-4 bg-black/70 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] uppercase font-mono tracking-widest px-3 py-1 rounded font-bold">
-          Súper Estreno Exclusivo
+          Estreno Exclusivo
         </div>
 
         {/* Poster */}
-        <div className="w-full lg:w-2/5 h-[340px] lg:h-auto relative">
+        {/* quite estos atributos de la linea 20 : h-[340px] lg:h-auto == por ==> min-h-[300px]*/}
+        <div className="w-full lg:w-2/5 min-h-[300px] relative">
           <img
-            src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=800"
-            alt="El Eco de las Sombras"
+            src="https://res.cloudinary.com/dmc9xgwzu/image/upload/c_fill,h_700,f_auto,q_auto/v1781375218/poster_delta_ecplap.png"
+            alt="Mision Delta"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#050505] via-transparent to-transparent opacity-80" />
@@ -34,7 +35,7 @@ export default function FeaturedMovieSection({
             </span>
 
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-              El Eco de las Sombras
+              Mision Delta
             </h2>
 
             <div className="flex flex-wrap items-center gap-4 text-xs text-[#8E8E8E] mb-6">

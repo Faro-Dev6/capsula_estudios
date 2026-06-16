@@ -7,6 +7,7 @@ import {
   Github,
   Send,
   Check,
+  Youtube,
 } from "lucide-react";
 
 export default function ContactSection({
@@ -45,9 +46,7 @@ export default function ContactSection({
             <div className="flex items-start gap-4">
               <MapPin className="w-5 h-5 text-[#9D0208] flex-shrink-0 mt-0.5" />
               <div>
-                <span className="text-xs text-[#8E8E8E] block">
-                  Ubicación
-                </span>
+                <span className="text-xs text-[#8E8E8E] block">Ubicación</span>
                 <span className="text-xs text-white">
                   San Telmo, CABA, Argentina
                 </span>
@@ -77,16 +76,20 @@ export default function ContactSection({
 
           <div className="flex gap-4 justify-center">
             <a
-              href="#"
+              href="https://www.instagram.com/capsulaestudios/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="p-3 bg-[#161616] border border-[#222] rounded-full text-white hover:text-[#9D0208] transition-all"
             >
               <Instagram className="w-4 h-4" />
             </a>
             <a
-              href="#"
+              href="https://www.youtube.com/@capsulaestudios5935"
+              target="_blank"
+              rel="noopener noreferrer"
               className="p-3 bg-[#161616] border border-[#222] rounded-full text-white hover:text-[#D4AF37] transition-all"
             >
-              <Github className="w-4 h-4" />
+              <Youtube className="w-4 h-4" />
             </a>
           </div>
         </div>

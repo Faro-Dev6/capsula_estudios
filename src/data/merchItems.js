@@ -1,20 +1,20 @@
 const merchItems = [
   {
     id: "remera-sombras",
-    name: "Remera 'Cine de Sombras'",
+    name: "Remera 'Misión Delta'",
     price: 15600,
     category: "indumentaria",
     image:
-      "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800",
+      "https://res.cloudinary.com/dmc9xgwzu/image/upload/c_fill,f_auto,q_80,w_600/v1781560242/merch_demo_hmxbef.png",
     description: "Algodón peinado premium, estampa cinemática en serigrafía.",
   },
   {
     id: "poster-eco",
-    name: "Poster Oficial Eco de las Sombras",
+    name: "Poster Oficial Mision Delta",
     price: 6200,
     category: "posters",
     image:
-      "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=800",
+      "https://res.cloudinary.com/dmc9xgwzu/image/upload/c_fill,f_auto,q_80,w_600/v1781375218/poster_delta_ecplap.png",
     description:
       "Tamaño A2 en papel ilustración de 250g con terminación mate.",
   },
@@ -24,7 +24,7 @@ const merchItems = [
     price: 8500,
     category: "accesorios",
     image:
-      "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=800",
+      "https://res.cloudinary.com/dmc9xgwzu/image/upload/v1781611729/ejemplo_merch_mwgc08.png",
     description: "Lienzo super reforzado con bolsillo interno.",
   },
   {
