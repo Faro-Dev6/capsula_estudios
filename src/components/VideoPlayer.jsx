@@ -16,7 +16,6 @@ export default function VideoPlayer({
     <AnimatePresence>
       {activeVideo && (
         <div className="fixed inset-0 bg-black z-50 flex flex-col justify-between p-4 sm:p-6 select-none">
-
           {/* HEADER */}
           <div className="flex items-center justify-between border-b border-[#111] pb-4 z-10">
             <div className="flex items-center gap-2">
@@ -58,30 +57,45 @@ export default function VideoPlayer({
 
           {/* PLAYER */}
           <div className="flex-grow flex items-center justify-center relative py-6">
-
             {!cinemaMode && (
               <div className="absolute w-3/4 h-[300px] bg-[#9D0208]/10 blur-[140px] rounded-full" />
             )}
 
-            <div className="w-full max-w-4xl aspect-video bg-black rounded-lg border border-[#1a1a1a] overflow-hidden">
+            {/* <div className="w-full max-w-4xl aspect-video bg-black rounded-lg border border-[#1a1a1a] overflow-hidden">
               <video
                 controls
                 autoPlay
                 src={activeVideo.url}
                 className="w-full h-full object-contain"
               />
+            </div> */}
+
+            <div className="w-full max-w-4xl aspect-video bg-black rounded-lg border border-[#1a1a1a] overflow-hidden">
+              {activeVideo.vimeoId ? (
+                <iframe
+                  src={`https://player.vimeo.com/video/${activeVideo.vimeoId}`}
+                  className="w-full h-full"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowFullScreen
+                  title={activeVideo.title}
+                />
+              ) : (
+                <video
+                  controls
+                  autoPlay
+                  src={activeVideo.videoUrl || activeVideo.url}
+                  className="w-full h-full object-contain"
+                />
+              )}
             </div>
           </div>
 
           {/* FOOTER / METADATA */}
           <div className="bg-[#101010] border border-[#1a1a1a] rounded-xl p-4 text-xs text-[#8E8E8E] flex flex-col md:flex-row justify-between items-center gap-4">
-
             <div className="flex items-center gap-3">
               <Compass className="w-4 h-4 text-[#D31018]" />
               <div>
-                <span className="text-white block">
-                  Vimeo API Integration
-                </span>
+                <span className="text-white block">Vimeo API Integration</span>
 
                 {vimeoLoading ? (
                   <span className="text-[10px] animate-pulse">
@@ -92,9 +106,7 @@ export default function VideoPlayer({
                     Video conectado
                   </span>
                 ) : (
-                  <span className="text-[10px]">
-                    Sin metadata
-                  </span>
+                  <span className="text-[10px]">Sin metadata</span>
                 )}
               </div>
             </div>
@@ -108,7 +120,6 @@ export default function VideoPlayer({
               STREAM LIVE
             </div>
           </div>
-
         </div>
       )}
     </AnimatePresence>

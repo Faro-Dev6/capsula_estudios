@@ -40,7 +40,7 @@ export default function FeaturedMovieSection({
 
             <div className="flex flex-wrap items-center gap-4 text-xs text-[#8E8E8E] mb-6">
               <span className="bg-[#9D0208]/10 text-[#9D0208] border border-[#9D0208]/20 px-2 py-0.5 rounded font-bold font-mono">
-                Thriller Psicológico
+                Suspenso
               </span>
 
               <span className="flex items-center gap-1">
@@ -52,25 +52,24 @@ export default function FeaturedMovieSection({
                 4.9 Puntos
               </span>
 
-              <span>2025</span>
+              <span>2024</span>
             </div>
 
             <p className="text-sm text-[#8E8E8E] leading-relaxed mb-6">
-              En las profundidades de un faro abandonado, un cineasta obsesionado descubre cintas de celuloide que documentan sucesos que aún no han ocurrido.
-              Cada proyección consume un pedazo de su propia realidad.
+              Un grupo de élite se dirige a una zona desconocida en el Delta para rescatar a la hija de un corporativo. Al llegar al lugar, se dan cuenta de que algo muy extraño y oscuro está sucediendo, un lugar donde la realidad se escapa entre sus manos.
             </p>
 
             <div className="border-t border-[#222] pt-6 mb-6">
               <div className="grid grid-cols-2 gap-4 text-xs">
                 <div>
                   <span className="text-[#8E8E8E] block">Director</span>
-                  <span className="text-white font-semibold">Juan Martín</span>
+                  <span className="text-white font-semibold">Joaquín Ramírez, Nahuel Bande</span>
                 </div>
 
                 <div>
                   <span className="text-[#8E8E8E] block">Elenco</span>
                   <span className="text-white font-semibold">
-                    Ricardo D., Sofía M.
+                    Emma Escalante, Joaquín Ramírez
                   </span>
                 </div>
               </div>

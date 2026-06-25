@@ -25,7 +25,6 @@ import MainRouter from "./components/layout/MainRouter";
 import merchItems from "./data/merchItems";
 import CheckoutSandbox from "./components/CheckoutSandbox";
 
-
 export default function App() {
   // ========================
   // STATE
@@ -283,6 +282,11 @@ export default function App() {
         setIsOpen={setIsDevConsoleOpen}
         systemLogs={systemLogs}
         setSystemLogs={setSystemLogs}
+        movies={movies}
+        handlePlayMovie={handlePlayMovie}
+        unlockMovieLocal={unlockMovieLocal}
+        setUnlockedMovies={setUnlockedMovies}
+        activeVideo={activeVideo}
       />
 
       {/* ================= FOOTER ================= */}
