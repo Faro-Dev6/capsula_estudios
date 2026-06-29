@@ -1,8 +1,8 @@
 import express from "express";
-import { createReview } from "../controllers/reviews.controller.js";
+import { getPressReviews } from "../controllers/reviews.controller.js";
 
 const router = express.Router();
 
-router.post("/", createReview);
+router.post("/", getPressReviews);
 
 export default router;

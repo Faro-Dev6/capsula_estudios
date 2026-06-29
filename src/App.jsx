@@ -144,7 +144,7 @@ export default function App() {
 
   const contact = useContact({ addLog });
 
-  const reviewsForm = useReviews({ addLog, fetchMoviesAndReviews });
+  // const reviewsForm = useReviews({ addLog, fetchMoviesAndReviews });
 
   // ========================
   // EFFECTS
@@ -226,7 +226,7 @@ export default function App() {
         merchItems={merchItems}
         addToCart={addToCart}
         contact={contact}
-        reviewsForm={reviewsForm}
+        // reviewsForm={reviewsForm}
         addLog={addLog}
       />
 

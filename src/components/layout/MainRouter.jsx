@@ -25,7 +25,7 @@ export default function MainRouter({
   merchItems,
   addToCart,
   contact,
-  reviewsForm,
+  // reviewsForm,
   addLog,
 }) {
   return (
@@ -55,7 +55,7 @@ export default function MainRouter({
           <ReviewsSection
             reviews={reviews}
             movies={movies}
-            {...reviewsForm}
+            // {...reviewsForm}
           />
         </div>
       )}
@@ -90,7 +90,7 @@ export default function MainRouter({
       {/* ---------- LOGIN ---------- */}
       {currentTab === "login" && (
         <LoginSection
-          {...reviewsForm.login}
+          // {...reviewsForm.login}
           setCurrentTab={setCurrentTab}
         />
       )}
