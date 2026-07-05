@@ -1,6 +1,9 @@
+import dotenv from "dotenv";
+dotenv.config();
+
+
 import express from "express";
 import path from "path";
-import dotenv from "dotenv";
 import { createServer as createViteServer } from "vite";
 
 import moviesRoutes from "./server/routes/movies.routes.js";
@@ -9,7 +12,6 @@ import vimeoRoutes from "./server/routes/vimeo.routes.js";
 import checkoutRoutes from "./server/routes/checkout.routes.js";
 import adminRoutes from "./server/routes/admin.routes.js";
 
-dotenv.config();
 
 const app = express();
 
@@ -53,5 +55,7 @@ async function startServer() {
     );
   });
 }
+
+console.log("Vimeo Token:", process.env.VIMEO_ACCESS_TOKEN?.slice(0, 10) + "...");
 
 startServer();
