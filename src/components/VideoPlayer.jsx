@@ -19,12 +19,12 @@ export default function VideoPlayer({
           {/* HEADER */}
           <div className="flex items-center justify-between border-b border-[#111] pb-4 z-10">
             <div className="flex items-center gap-2">
-              <Film className="w-5 h-5 text-[#9D0208]" />
+              <Film className="w-5 h-5 text-primary" />
               <div>
                 <h3 className="text-sm font-bold text-white">
                   {activeVideo.title}
                 </h3>
-                <span className="text-[10px] text-[#8E8E8E]">
+                <span className="text-[10px] text-foreground-muted">
                   Reproductor Oficial Capsula Estudios
                 </span>
               </div>
@@ -35,8 +35,8 @@ export default function VideoPlayer({
                 onClick={() => setCinemaMode(!cinemaMode)}
                 className={`px-3 py-1 text-xs border rounded ${
                   cinemaMode
-                    ? "bg-[#9D0208] text-white border-transparent"
-                    : "border-[#2d2d2d] text-[#8E8E8E]"
+                    ? "bg-primary text-white border-transparent"
+                    : "border-border-muted text-foreground-muted"
                 }`}
               >
                 {cinemaMode ? "Modo Cine ON" : "Modo Cine"}
@@ -48,7 +48,7 @@ export default function VideoPlayer({
                   setCinemaMode(false);
                   addLog("Reproducción detenida.");
                 }}
-                className="p-2 bg-[#161616] border border-[#222] rounded-full text-white"
+                className="p-2 bg-surface border border-border rounded-full text-text"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -58,7 +58,7 @@ export default function VideoPlayer({
           {/* PLAYER */}
           <div className="flex-grow flex items-center justify-center relative py-6">
             {!cinemaMode && (
-              <div className="absolute w-3/4 h-[300px] bg-[#9D0208]/10 blur-[140px] rounded-full" />
+              <div className="absolute w-3/4 h-[300px] bg-primary/10 blur-[140px] rounded-full" />
             )}
 
             {/* <div className="w-full max-w-4xl aspect-video bg-black rounded-lg border border-[#1a1a1a] overflow-hidden">
@@ -91,7 +91,7 @@ export default function VideoPlayer({
           </div>
 
           {/* FOOTER / METADATA */}
-          <div className="bg-[#101010] border border-[#1a1a1a] rounded-xl p-4 text-xs text-[#8E8E8E] flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="bg-surface-secondary border border-[#1a1a1a] rounded-xl p-4 text-xs text-foreground-muted flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-3">
               <Compass className="w-4 h-4 text-[#D31018]" />
               <div>

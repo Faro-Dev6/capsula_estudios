@@ -14,13 +14,13 @@
 //   handleReviewSubmit,
 // }) {
 //   return (
-//     <div className="max-w-xl mx-auto bg-[#161616] border border-[#252525] rounded-2xl p-6 sm:p-8 shadow-xl">
-//       <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-//         <Star className="w-4 h-4 text-[#D4AF37]" />
+//     <div className="max-w-xl mx-auto bg-surface border border-[#252525] rounded-2xl p-6 sm:p-8 shadow-xl">
+//       <h3 className="text-lg font-bold text-foreground mb-2 flex items-center gap-2">
+//         <Star className="w-4 h-4 text-accent" />
 //         Deja tu Crítica Profesional
 //       </h3>
 
-//       <p className="text-xs text-[#8E8E8E] mb-6">
+//       <p className="text-xs text-foreground-muted mb-6">
 //         Tu valoración aporta enormemente a la difusión del cine de autor independiente.
 //       </p>
 
@@ -29,7 +29,7 @@
 //         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
 //           <div>
-//             <label className="block text-xs uppercase tracking-wider text-[#8E8E8E] mb-1 font-mono">
+//             <label className="block text-xs uppercase tracking-wider text-foreground-muted mb-1 font-mono">
 //               Nombre o Seudónimo
 //             </label>
 
@@ -38,12 +38,12 @@
 //               required
 //               value={reviewName}
 //               onChange={(e) => setReviewName(e.target.value)}
-//               className="w-full bg-[#050505] border border-[#2d2d2d] focus:border-[#9D0208] text-[#F5F5F5] rounded-lg p-2.5 text-xs"
+//               className="w-full bg-background border border-border-muted focus:border-primary text-foreground rounded-lg p-2.5 text-xs"
 //             />
 //           </div>
 
 //           <div>
-//             <label className="block text-xs uppercase tracking-wider text-[#8E8E8E] mb-1 font-mono">
+//             <label className="block text-xs uppercase tracking-wider text-foreground-muted mb-1 font-mono">
 //               Obra Audiovisual
 //             </label>
 
@@ -51,7 +51,7 @@
 //               value={reviewMovie}
 //               onChange={(e) => setReviewMovie(e.target.value)}
 //               required
-//               className="w-full bg-[#050505] border border-[#2d2d2d] focus:border-[#9D0208] text-[#F5F5F5] rounded-lg p-2.5 text-xs"
+//               className="w-full bg-background border border-border-muted focus:border-primary text-foreground rounded-lg p-2.5 text-xs"
 //             >
 //               <option value="">Selecciona una producción...</option>
 //               {movies.map((m) => (
@@ -64,7 +64,7 @@
 //         </div>
 
 //         <div>
-//           <label className="block text-xs uppercase tracking-wider text-[#8E8E8E] mb-1 font-mono">
+//           <label className="block text-xs uppercase tracking-wider text-foreground-muted mb-1 font-mono">
 //             Valoración
 //           </label>
 
@@ -78,7 +78,7 @@
 //                 <Star
 //                   className={`w-5 h-5 ${
 //                     num <= reviewRating
-//                       ? "text-[#D4AF37] fill-[#D4AF37]"
+//                       ? "text-accent fill-accent"
 //                       : "text-[#333]"
 //                   }`}
 //                 />
@@ -92,13 +92,13 @@
 //           rows={3}
 //           value={reviewComment}
 //           onChange={(e) => setReviewComment(e.target.value)}
-//           className="w-full bg-[#050505] border border-[#2d2d2d] focus:border-[#9D0208] text-[#F5F5F5] rounded-lg p-2.5 text-xs"
+//           className="w-full bg-background border border-border-muted focus:border-primary text-foreground rounded-lg p-2.5 text-xs"
 //         />
 
 //         <button
 //           type="submit"
 //           disabled={reviewSubmitted}
-//           className="w-full py-2.5 bg-[#9D0208] text-white text-xs uppercase font-bold rounded-lg"
+//           className="w-full py-2.5 bg-primary text-white text-xs uppercase font-bold rounded-lg"
 //         >
 //           {reviewSubmitted ? (
 //             <>

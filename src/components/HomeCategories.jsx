@@ -4,7 +4,7 @@ export default function HomeCategories({
   addLog,
 }) {
   return (
-    <section className="w-full flex flex-col md:flex-row gap-[1px] bg-white/10 select-none">
+    <section className="w-full flex flex-col md:flex-row gap-[1px] border-t border-border select-none">
 
       <div
         onClick={() => {
@@ -14,7 +14,7 @@ export default function HomeCategories({
             "Redireccionado a Películas desde Cartas Destacadas."
           );
         }}
-        className="flex-1 min-h-[280px] relative group overflow-hidden bg-[#161616] cursor-pointer"
+        className="flex-1 min-h-[280px] relative group overflow-hidden bg-surface cursor-pointer"
       >
         <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300 z-10"></div>
 
@@ -27,13 +27,13 @@ export default function HomeCategories({
         />
 
         <div className="absolute bottom-8 left-8 z-20">
-          <div className="w-10 h-[1px] bg-[#9D0208] mb-3"></div>
+          <div className="w-10 h-[1px] bg-primary mb-3"></div>
 
-          <h2 className="text-3xl font-sans font-black uppercase tracking-tighter text-white">
+          <h2 className="text-3xl font-sans font-black uppercase tracking-tighter text-foreground">
             Películas
           </h2>
 
-          <p className="text-xs text-[#8E8E8E] uppercase tracking-widest mt-1 italic">
+          <p className="text-xs text-foreground-muted uppercase tracking-widest mt-1 italic">
             LARGOMETRAJES PREMIADOS
           </p>
         </div>
@@ -47,7 +47,7 @@ export default function HomeCategories({
             "Redireccionado a Cortometrajes desde Cartas Destacadas."
           );
         }}
-        className="flex-1 min-h-[280px] relative group overflow-hidden bg-[#161616] cursor-pointer"
+        className="flex-1 min-h-[280px] relative group overflow-hidden bg-surface cursor-pointer"
       >
         <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300 z-10"></div>
 
@@ -60,13 +60,13 @@ export default function HomeCategories({
         />
 
         <div className="absolute bottom-8 left-8 z-20">
-          <div className="w-10 h-[1px] bg-[#9D0208] mb-3"></div>
+          <div className="w-10 h-[1px] bg-primary mb-3"></div>
 
-          <h2 className="text-3xl font-sans font-black uppercase tracking-tighter text-white">
+          <h2 className="text-3xl font-sans font-black uppercase tracking-tighter text-foreground">
             Cortos
           </h2>
 
-          <p className="text-xs text-[#8E8E8E] uppercase tracking-widest mt-1 italic">
+          <p className="text-xs text-foreground-muted uppercase tracking-widest mt-1 italic">
             NARRATIVAS COMPACTAS
           </p>
         </div>
@@ -76,7 +76,7 @@ export default function HomeCategories({
         onClick={() => {
           setCurrentTab("merch");
         }}
-        className="flex-1 min-h-[280px] relative group overflow-hidden bg-[#161616] cursor-pointer"
+        className="flex-1 min-h-[280px] relative group overflow-hidden bg-surface cursor-pointer"
       >
         <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300 z-10"></div>
 
@@ -89,13 +89,13 @@ export default function HomeCategories({
         />
 
         <div className="absolute bottom-8 left-8 z-20">
-          <div className="w-10 h-[1px] bg-[#9D0208] mb-3"></div>
+          <div className="w-10 h-[1px] bg-primary mb-3"></div>
 
-          <h2 className="text-3xl font-sans font-black uppercase tracking-tighter text-white">
+          <h2 className="text-3xl font-sans font-black uppercase tracking-tighter text-foreground">
             Merch
           </h2>
 
-          <p className="text-xs text-[#8E8E8E] uppercase tracking-widest mt-1 italic">
+          <p className="text-xs text-foreground-muted uppercase tracking-widest mt-1 italic">
             COLECCIÓN LIMITADA
           </p>
         </div>

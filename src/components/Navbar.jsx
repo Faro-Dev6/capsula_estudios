@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { ShoppingCart, User, Menu, X, Terminal, ChevronDown } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
 
 export function RocketLogo() {
   return (
     <svg 
       viewBox="0 0 100 100" 
-      className="w-10 h-10 text-white" 
+      className="w-10 h-10 text-foreground" 
       stroke="currentColor" 
       fill="none" 
       strokeWidth="2.5" 
@@ -35,7 +36,9 @@ export default function Navbar({
   userEmail,
   onLogout,
   onOpenDevConsole,
-  moviesTypeFilter
+  moviesTypeFilter,
+  theme,
+  nextTheme,
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -69,7 +72,7 @@ export default function Navbar({
     <header
       className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
         scrolled
-          ? "bg-[#050505]/95 backdrop-blur-md border-b border-[#161616]"
+          ? "bg-background/95 backdrop-blur-md border-b border-border"
           : "bg-transparent"
       }`}
     >
@@ -79,12 +82,12 @@ export default function Navbar({
           onClick={() => handleMenuClick("inicio")}
           className="flex items-center gap-3 cursor-pointer group"
         >
-          <div className="bg-transparent flex items-center justify-center text-white font-bold tracking-tighter shadow-md hover:scale-105 transition-transform">
+          <div className="bg-transparent flex items-center justify-center text-foreground font-bold tracking-tighter shadow-md hover:scale-105 transition-transform">
             <RocketLogo />
           </div>
           <div>
-            <h1 className="text-base sm:text-lg font-sans font-extrabold tracking-widest text-white leading-none">CAPSULA ESTUDIOS</h1>
-            <span className="text-[9px] font-mono text-[#D4AF37] tracking-[0.2em] uppercase font-bold">Productora Cine</span>
+            <h1 className="text-base sm:text-lg font-sans font-extrabold tracking-widest text-foreground leading-none">CAPSULA ESTUDIOS</h1>
+            <span className="text-[9px] font-mono text-accent tracking-[0.2em] uppercase font-bold">Productora Cine</span>
           </div>
         </div>
 
@@ -95,7 +98,7 @@ export default function Navbar({
             <button
               onClick={() => handleMenuClick("producciones", "todos")}
               className={`flex items-center gap-1 cursor-pointer py-2 transition-colors ${
-                currentTab === "producciones" ? "text-[#9D0208]" : "text-[#F5F5F5] hover:text-[#D4AF37]"
+                currentTab === "producciones" ? "text-primary" : "text-foreground hover:text-accent"
               }`}
             >
               <span>Producciones</span>
@@ -104,7 +107,7 @@ export default function Navbar({
 
             {/* Dropdown list */}
             <div
-              className={`absolute top-full left-0 w-44 bg-[#161616] border border-[#222] rounded-lg p-2 shadow-2xl transition-all duration-200 transform origin-top-left ${
+              className={`absolute top-full left-0 w-44 bg-surface border border-border rounded-lg p-2 shadow-2xl transition-all duration-200 transform origin-top-left ${
                 dropdownOpen
                   ? "opacity-100 visible translate-y-0"
                   : "opacity-0 invisible -translate-y-2 pointer-events-none"
@@ -112,19 +115,19 @@ export default function Navbar({
             >
               <button
                 onClick={() => handleMenuClick("producciones", "todos")}
-                className="w-full text-left px-3 py-2 hover:bg-[#050505] rounded text-xs text-[#F5F5F5] hover:text-[#D4AF37] cursor-pointer"
+                className="w-full text-left px-3 py-2 hover:bg-background rounded text-xs text-foreground hover:text-accent cursor-pointer"
               >
                 Todas las Obras
               </button>
               <button
                 onClick={() => handleMenuClick("producciones", "pelicula")}
-                className="w-full text-left px-3 py-2 hover:bg-[#050505] rounded text-xs text-[#F5F5F5] hover:text-[#D4AF37] cursor-pointer"
+                className="w-full text-left px-3 py-2 hover:bg-background rounded text-xs text-foreground hover:text-accent cursor-pointer"
               >
                 Películas
               </button>
               <button
                 onClick={() => handleMenuClick("producciones", "corto")}
-                className="w-full text-left px-3 py-2 hover:bg-[#050505] rounded text-xs text-[#F5F5F5] hover:text-[#D4AF37] cursor-pointer"
+                className="w-full text-left px-3 py-2 hover:bg-background rounded text-xs text-foreground hover:text-accent cursor-pointer"
               >
                 Cortometrajes
               </button>
@@ -136,7 +139,7 @@ export default function Navbar({
               key={item.id}
               onClick={() => handleMenuClick(item.id)}
               className={`transition-colors py-2 cursor-pointer ${
-                currentTab === item.id ? "text-[#9D0208]" : "text-[#F5F5F5] hover:text-[#D4AF37]"
+                currentTab === item.id ? "text-primary" : "text-foreground hover:text-accent"
               }`}
             >
               {item.label}
@@ -146,25 +149,29 @@ export default function Navbar({
 
         {/* Action Widgets Layout */}
         <div className="flex items-center gap-4">
+          <ThemeToggle
+            theme={theme}
+            nextTheme={nextTheme}
+          />
           {/* Developer System Logger Logs Panel tab */}
           <button
             onClick={onOpenDevConsole}
             title="Consola de Integraciones API"
-            className="p-2 text-[#8E8E8E] hover:text-white bg-[#101010] border border-[#222] rounded-lg transition-transform hover:scale-105 relative cursor-pointer hidden sm:flex"
+            className="p-2 text-foreground-muted hover:text-foreground bg-surface-secondary border border-border rounded-lg transition-transform hover:scale-105 relative cursor-pointer hidden sm:flex"
           >
-            <Terminal className="w-4 h-4 text-[#D4AF37]" />
+            <Terminal className="w-4 h-4 text-accent" />
             <span className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-500 rounded-full animate-ping" />
           </button>
 
           {/* Cart Widget Icon with badge */}
           <button
             onClick={onOpenCart}
-            className="p-2 text-[#F5F5F5] hover:text-[#D4AF37] transition-all relative cursor-pointer"
+            className="p-2 text-foreground hover:text-accent transition-all relative cursor-pointer"
             id="nav-cart-btn"
           >
             <ShoppingCart className="w-5 h-5" />
             {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#9D0208] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-bounce">
+              <span className="absolute -top-1 -right-1 bg-primary text-foreground text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-bounce">
                 {cartCount}
               </span>
             )}
@@ -175,14 +182,14 @@ export default function Navbar({
             <div className="flex items-center gap-2">
               <button
                 onClick={() => handleMenuClick("login")}
-                className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-[#161616] hover:bg-[#222] border border-[#333] rounded-lg text-xs cursor-pointer text-white"
+                className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-surface hover:bg-surface-hover border border-border-strong rounded-lg text-xs cursor-pointer text-foreground"
               >
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span className="max-w-[110px] truncate">{userEmail}</span>
               </button>
               <button
                 onClick={onLogout}
-                className="text-xs text-[#8E8E8E] hover:text-[#9D0208] transition-colors cursor-pointer"
+                className="text-xs text-foreground-muted hover:text-primary transition-colors cursor-pointer"
               >
                 Salir
               </button>
@@ -190,7 +197,7 @@ export default function Navbar({
           ) : (
             <button
               onClick={() => handleMenuClick("login")}
-              className={`flex items-center gap-1.5 px-4 py-1.5 bg-[#9D0208] hover:bg-[#b0030a] text-white text-xs font-semibold rounded-lg transition-all cursor-pointer shadow-md shadow-[#9D0208]/20`}
+              className={`flex items-center gap-1.5 px-4 py-1.5 bg-primary hover:bg-primary-hover text-foreground text-xs font-semibold rounded-lg transition-all cursor-pointer shadow-md shadow-primary/20`}
             >
               <User className="w-3.5 h-3.5" />
               <span>Ingresar</span>
@@ -200,7 +207,7 @@ export default function Navbar({
           {/* Mobile hamburger menu toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-[#F5F5F5] hover:text-white cursor-pointer"
+            className="md:hidden p-2 text-foreground hover:text-foreground cursor-pointer"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -209,12 +216,12 @@ export default function Navbar({
 
       {/* Mobile Menu Panel */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#050505] border-b border-[#161616] px-6 py-6 space-y-4 animate-fadeIn">
+        <div className="md:hidden bg-background border-b border-border px-6 py-6 space-y-4 animate-fadeIn">
           <div className="space-y-2">
-            <span className="text-[10px] uppercase tracking-wider font-mono text-[#8E8E8E] block mb-2">Secciones</span>
+            <span className="text-[10px] uppercase tracking-wider font-mono text-foreground-muted block mb-2">Secciones</span>
             <button
               onClick={() => handleMenuClick("producciones", "todos")}
-              className="w-full text-left py-2 border-b border-[#111] text-sm text-[#F5F5F5] hover:text-[#D4AF37]"
+              className="w-full text-left py-2 border-b border-surface-secondary text-sm text-foreground hover:text-accent"
             >
               Películas y Cortos
             </button>
@@ -222,14 +229,14 @@ export default function Navbar({
               <button
                 key={item.id}
                 onClick={() => handleMenuClick(item.id)}
-                className="w-full text-left py-2 border-b border-[#111] text-sm text-[#F5F5F5] hover:text-[#D4AF37]"
+                className="w-full text-left py-2 border-b border-surface-secondary text-sm text-foreground hover:text-accent"
               >
                 {item.label}
               </button>
             ))}
             <button
               onClick={onOpenDevConsole}
-              className="w-full text-left py-2 text-sm text-[#D4AF37] flex items-center gap-2"
+              className="w-full text-left py-2 text-sm text-accent flex items-center gap-2"
             >
               <Terminal className="w-4 h-4" /> Consola de APIs & Webhooks
             </button>
