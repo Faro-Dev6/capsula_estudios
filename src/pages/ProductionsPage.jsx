@@ -15,6 +15,17 @@ export default function ProductionsPage({
   triggerCheckout,
   setSelectedMovie
 }) {
+
+  // ✅ función única para checkout (sin cambiar lógica)
+  const handleCheckout = (movie) => {
+    triggerCheckout(
+      movie.title,
+      movie.price,
+      false,
+      movie.id
+    );
+  };
+
   return (
     <section className="max-w-7xl mx-auto px-6 py-12">
       <div className="flex flex-col md:flex-row items-baseline justify-between gap-4 border-b border-[#222] pb-6 mb-12">
@@ -105,22 +116,11 @@ export default function ProductionsPage({
                         </span>
 
                         <span className="text-xl text-white font-mono font-bold">
-                          $
-                          {movie.price.toLocaleString(
-                            "es-AR"
-                          )}{" "}
-                          ARS
+                          ${movie.price.toLocaleString("es-AR")} ARS
                         </span>
 
                         <button
-                          onClick={() =>
-                            triggerCheckout(
-                              movie.title,
-                              movie.price,
-                              false,
-                              movie.id
-                            )
-                          }
+                          onClick={() => handleCheckout(movie)}
                           className="px-4 py-2 mt-2 bg-white text-black hover:bg-[#D4AF37] hover:text-black rounded text-[11px] font-bold uppercase tracking-wider transition-colors cursor-pointer"
                         >
                           Obtener Acceso
@@ -155,9 +155,7 @@ export default function ProductionsPage({
 
                   <div className="border-t border-[#222] pt-4 mt-auto flex items-center justify-between gap-2">
                     <button
-                      onClick={() =>
-                        setSelectedMovie(movie)
-                      }
+                      onClick={() => setSelectedMovie(movie)}
                       className="text-xs text-[#8E8E8E] hover:text-white transition-colors cursor-pointer flex items-center gap-1 font-semibold"
                     >
                       <Info className="w-3.5 h-3.5" />
@@ -166,9 +164,7 @@ export default function ProductionsPage({
 
                     {isUnlocked ? (
                       <button
-                        onClick={() =>
-                          handlePlayMovie(movie)
-                        }
+                        onClick={() => handlePlayMovie(movie)}
                         className="px-3.5 py-1.5 bg-emerald-700/85 hover:bg-emerald-600 text-white rounded text-xs transition-colors flex items-center gap-1 font-semibold cursor-pointer"
                       >
                         <Play className="w-3 h-3 fill-white" />
@@ -176,14 +172,7 @@ export default function ProductionsPage({
                       </button>
                     ) : (
                       <button
-                        onClick={() =>
-                          triggerCheckout(
-                            movie.title,
-                            movie.price,
-                            false,
-                            movie.id
-                          )
-                        }
+                        onClick={() => handleCheckout(movie)}
                         className="px-3.5 py-1.5 bg-[#9D0208] hover:bg-[#b0030a] text-white rounded text-xs transition-colors flex items-center gap-1 font-semibold cursor-pointer shadow-md"
                       >
                         <Lock className="w-3 h-3 text-[#D4AF37]" />

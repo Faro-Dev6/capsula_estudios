@@ -23,17 +23,17 @@ export default function ReviewsList({ reviews }) {
             </div>
 
             <p className="text-sm italic text-[#8E8E8E] mb-6 leading-relaxed">
-              "{rev.comment}"
+              "{rev.quote}"
             </p>
           </div>
 
           <div className="flex items-center justify-between border-t border-[#222]/50 pt-4 mt-auto">
             <span className="text-xs text-white font-medium">
-              {rev.user}
+              {rev.source}
             </span>
 
             <span className="text-[10px] text-[#8E8E8E] font-mono uppercase tracking-widest">
-              {rev.movie}
+              {rev.movieId}
             </span>
           </div>
         </div>

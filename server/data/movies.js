@@ -1,18 +1,19 @@
 export const moviesDb = [
   {
-    id: "eco-sombras",
-    title: "El Eco de las Sombras",
+    id: "mision-delta",
+    title: "Misión Delta",
     type: "pelicula",
     duration: "1h 42min",
-    year: 2025,
-    genre: "Thriller Psicológico",
-    director: "Juan Martín",
+    year: 2024,
+    genre: "Suspenso",
+    director: "Joaquín Ramírez, Nahuel Bande",
     rating: "SAM 16",
-    synopsis: "En las profundidades de un faro abandonado, un cineasta obsesionado descubre cintas de celuloide que documentan sucesos que aún no han ocurrido. Cada proyección consume un pedazo de su propia realidad.",
+    synopsis: "Un grupo de élite se dirige a una zona desconocida en el Delta para rescatar a la hija de un corporativo. Al llegar al lugar, se dan cuenta de que algo muy extraño y oscuro está sucediendo, un lugar donde la realidad se escapa entre sus manos..",
     poster: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=800",
     backdrop: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&q=80&w=1600",
     videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    vimeoId: "76239102",
+    vimeoId: "1132062590",
+    accessType: "purchase",
     price: 4500,
     reviews: [
       { user: "Carlos G.", rating: 5, comment: "De lo mejor del cine independiente argentino de los últimos años." }
@@ -30,8 +31,9 @@ export const moviesDb = [
     synopsis: "La primera señal extraterrestre llega a un radiotelescopio andino, pero no contiene sonido ni imágenes. Es un código binario que apaga sistemáticamente todo recuerdo de la infancia en quienes lo escuchan.",
     poster: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&q=80&w=800",
     backdrop: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1600",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-    vimeoId: "12345678",
+    videoUrl: "https://vimeo.com/1204143719?fl=pl&fe=sh",
+    vimeoId: "1204143719",
+    accessType: "free",
     price: 1800,
     reviews: []
   },
@@ -47,8 +49,9 @@ export const moviesDb = [
     synopsis: "Un relojero de alta precisión en San Telmo descubre que puede revivir los últimos 60 segundos de su vida a voluntad. Los problemas comienzan cuando encuentra a un cliente que está experimentando el exacto bucle invertido.", 
     poster: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&q=80&w=800", 
     backdrop: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=1600", 
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", 
-    vimeoId: "87654321", 
+    videoUrl: "https://vimeo.com/1201885224?fl=pl&fe=sh", 
+    vimeoId: "1201885224", 
+    accessType: "purchase",
     price: 3800, 
     reviews: [] },
   { 
@@ -63,8 +66,9 @@ export const moviesDb = [
     synopsis: "Un retrato sónico e hipnótico de la estepa patagónica. El viento como único testigo y narrador de historias olvidadas por la historia oficial.", 
     poster: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800", 
     backdrop: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1600", 
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", 
-    vimeoId: "99887766", 
+    videoUrl: "https://vimeo.com/1201885224?fl=pl&fe=sh",
+    vimeoId: "99887766",
+    accessType: "free",
     price: 1200, 
     reviews: [] 
   }

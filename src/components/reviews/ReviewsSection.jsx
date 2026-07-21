@@ -1,5 +1,5 @@
 import ReviewsList from "./ReviewsList";
-import ReviewForm from "./ReviewForm";
+// import ReviewForm from "./ReviewForm";
 
 export default function ReviewsSection(props) {
   return (
@@ -14,7 +14,7 @@ export default function ReviewsSection(props) {
 
         <ReviewsList reviews={props.reviews} />
 
-        <ReviewForm {...props} />
+        {/* <ReviewForm {...props} /> */}
 
       </div>
     </section>

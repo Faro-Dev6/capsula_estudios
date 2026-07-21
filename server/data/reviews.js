@@ -1,18 +1,47 @@
-export const customReviews = [
+export const pressReviews = [
   {
     id: 1,
-    movie: "El Eco de las Sombras",
-    user: "Sofía M.",
-    rating: 5,
-    comment:
-      "Una obra de arte visual. La atmósfera oscura y elegante me atrapó desde el primer segundo."
+    movieId: "mision-delta",
+
+    type: "festival",
+
+    source: "Festival Internacional de Cine Fantástico",
+
+    title: "Selección Oficial 2025",
+
+    quote: "Una propuesta intensa que revitaliza el cine de género argentino.",
+
+    year: 2025,
   },
+
   {
     id: 2,
-    movie: "Origen Silencioso",
-    user: "Martín R.",
+    movieId: "mision-delta",
+
+    type: "critic",
+
+    source: "Revista Cine Independiente",
+
+    rating: 5,
+
+    quote:
+      "Una experiencia cinematográfica inquietante y visualmente poderosa.",
+
+    year: 2025,
+  },
+
+  {
+    id: 3,
+    movieId: "origen-silencioso",
+
+    type: "critic",
+
+    source: "Portal Cine Latino",
+
     rating: 4,
-    comment:
-      "Precioso cortometraje. El diseño sonoro y el manejo del foco son excepcionales."
-  }
+
+    quote: "Un cortometraje elegante con una identidad visual muy marcada.",
+
+    year: 2026,
+  },
 ];
