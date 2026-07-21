@@ -1,8 +1,51 @@
+# ==========================
+# Dependencies
+# ==========================
 node_modules/
-build/
+
+# ==========================
+# Build
+# ==========================
 dist/
+build/
 coverage/
-.DS_Store
-*.log
-.env*
+
+# ==========================
+# Environment
+# ==========================
+.env
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
+
+# Permitir un ejemplo
 !.env.example
+
+# ==========================
+# Logs
+# ==========================
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ==========================
+# OS
+# ==========================
+.DS_Store
+Thumbs.db
+
+# ==========================
+# IDE
+# ==========================
+.vscode/
+.idea/
+
+# ==========================
+# Temporary files
+# ==========================
+*.tmp
+*.swp
+*.swo
