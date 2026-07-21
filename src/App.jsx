@@ -15,6 +15,7 @@ import useDevConsole from "./hooks/useDevConsole";
 import useContact from "./hooks/useContact";
 import useReviews from "./hooks/useReviews";
 import useContent from "./hooks/useContent";
+import useTheme from "./hooks/useTheme";
 
 import Navbar, { RocketLogo } from "./components/Navbar";
 import CartDrawer from "./components/cart/CartDrawer";
@@ -35,6 +36,8 @@ export default function App() {
   const [activeSandboxUrl, setActiveSandboxUrl] = useState(null);
   const [sandboxItemTitle, setSandboxItemTitle] = useState("");
   const [sandboxPrice, setSandboxPrice] = useState(0);
+  
+  const { theme, nextTheme } = useTheme();
 
   // ========================
   // DEV CONSOLE
@@ -194,7 +197,7 @@ export default function App() {
   // ========================
   return (
     <div
-      className={`min-h-screen bg-[#050505] text-[#F5F5F5] font-sans relative ${cinemaMode ? "overflow-hidden" : ""}`}
+      className={`min-h-screen bg-background text-foreground font-sans relative ${cinemaMode ? "overflow-hidden" : ""}`}
     >
       {/* ================= NAVBAR ================= */}
       <Navbar
@@ -205,6 +208,8 @@ export default function App() {
         userEmail={userEmail}
         onLogout={handleLogout}
         onOpenDevConsole={() => setIsDevConsoleOpen(!isDevConsoleOpen)}
+        theme={theme}
+        nextTheme={nextTheme}
         moviesTypeFilter={(type) => {
           setMovieFilter(type);
           setCurrentTab("producciones");
@@ -290,7 +295,7 @@ export default function App() {
       />
 
       {/* ================= FOOTER ================= */}
-      <footer className="py-12 px-6 bg-black border-t border-white/5">
+      <footer className="py-12 px-6 bg-surface-secondary border-t border-border">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-6">
           <div>
             <div
@@ -301,7 +306,7 @@ export default function App() {
               <span className="text-sm font-black">CAPSULA ESTUDIOS</span>
             </div>
 
-            <div className="text-[10px] text-[#8E8E8E]">
+            <div className="text-[10px] text-foreground-muted">
               © 2026 CAPSULA ESTUDIOS
             </div>
           </div>

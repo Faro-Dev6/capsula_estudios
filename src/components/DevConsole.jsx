@@ -19,13 +19,13 @@ export default function DevConsole({
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.98 }}
-          className="fixed bottom-6 left-6 right-6 lg:w-[480px] bg-black border-2 border-[#2d2d2d] rounded-2xl p-5 z-40 shadow-2xl overflow-hidden text-xs max-h-[460px] flex flex-col justify-between font-mono"
+          className="fixed bottom-6 left-6 right-6 lg:w-[480px] bg-background border-2 border-border-muted rounded-2xl p-5 z-40 shadow-2xl overflow-hidden text-xs max-h-[500px] flex flex-col justify-between font-mono"
           style={{ borderColor: "#9D0208" }}
         >
           {/* HEADER */}
-          <div className="flex items-center justify-between pb-3 border-b border-[#222] mb-3">
-            <div className="flex items-center gap-2 text-white font-bold">
-              <Terminal className="text-[#D4AF37] w-4 h-4" />
+          <div className="flex items-center justify-between pb-3 border-b border-border mb-3">
+            <div className="flex items-center gap-2 text-foreground font-bold">
+              <Terminal className="text-accent w-4 h-4" />
               <span>Capsula Dev Console</span>
             </div>
 
@@ -35,12 +35,12 @@ export default function DevConsole({
           </div>
 
           {/* LOGS */}
-          <div className="bg-[#050505] p-3 rounded-lg border border-[#1a1a1a] h-48 overflow-y-auto space-y-1 text-zinc-300">
+          <div className="bg-background p-3 rounded-lg border border-border-strong h-48 overflow-y-auto space-y-1 text-foreground">
             {systemLogs.length === 0 ? (
-              <span className="text-zinc-600 italic">Sin logs...</span>
+              <span className="text-foreground italic">Sin logs...</span>
             ) : (
               systemLogs.map((log, i) => (
-                <div key={i} className="border-b border-[#111] pb-1">
+                <div key={i} className="border-b border-border pb-1">
                   {log}
                 </div>
               ))
@@ -49,15 +49,15 @@ export default function DevConsole({
 
           {/* PLAYER TEST*/}
 
-          <div className="mt-3 border border-[#1a1a1a] rounded-lg p-3">
-            <div className="text-[#D4AF37] mb-2 font-bold">PLAYER TEST</div>
+          <div className="mt-3 border border-border-strong rounded-lg p-3">
+            <div className="text-accent mb-2 font-bold">PLAYER TEST</div>
 
             <div className="flex flex-wrap gap-2">
               {movies.map((movie) => (
                 <button
                   key={movie.id}
                   onClick={() => handlePlayMovie(movie)}
-                  className="px-2 py-1 bg-[#161616] rounded border border-[#222]"
+                  className="px-2 py-1 bg-surface rounded border border-border"
                 >
                   {movie.title}
                 </button>
@@ -67,8 +67,8 @@ export default function DevConsole({
 
           {/* ACCES TEST */}
 
-          <div className="mt-3 border border-[#1a1a1a] rounded-lg p-3">
-            <div className="text-[#D4AF37] mb-2 font-bold">ACCESS TEST</div>
+          <div className="mt-3 border border-border-strong rounded-lg p-3">
+            <div className="text-accent mb-2 font-bold">ACCESS TEST</div>
 
             <div className="flex flex-wrap gap-2">
               {movies.map((movie) => (
@@ -86,7 +86,7 @@ export default function DevConsole({
                   setUnlockedMovies([]);
                   localStorage.removeItem("capsulastudios_unlocked");
                 }}
-                className="px-2 py-1 bg-red-900 rounded"
+                className="px-2 py-1 bg-danger text-white rounded"
               >
                 Reset Access
               </button>
@@ -95,8 +95,8 @@ export default function DevConsole({
 
           {/* VIMEO DEBUG */}
 
-          <div className="mt-3 border border-[#1a1a1a] rounded-lg p-3">
-            <div className="text-[#D4AF37] mb-2 font-bold">VIMEO DEBUG</div>
+          <div className="mt-3 border border-border-strong rounded-lg p-3">
+            <div className="text-accent mb-2 font-bold">VIMEO DEBUG</div>
 
             {activeVideo ? (
               <>
@@ -109,12 +109,12 @@ export default function DevConsole({
           </div>
 
           {/* FOOTER ACTIONS */}
-          <div className="pt-3 border-t border-[#1a1a1a] flex justify-between text-[10px] text-[#8E8E8E]">
+          <div className="pt-3 border-t border-[#1a1a1a] flex justify-between text-[10px] text-foreground-muted">
             <span>Logs: {systemLogs.length}</span>
 
             <button
               onClick={() => setSystemLogs([])}
-              className="text-[#9D0208] hover:underline"
+              className="text-primary hover:underline"
             >
               Limpiar
             </button>

@@ -1,153 +1,225 @@
-📽️ Capsula Estudios
+# 📽️ Capsula Estudios
 
-Plataforma de streaming de cine independiente con sistema de pagos, catálogo de películas, tienda de merchandising y blog de producción audiovisual.
+Plataforma web de streaming de cine independiente desarrollada con React, que integra catálogo de películas, reproducción de contenido, sistema de pagos, tienda de merchandising, blog y herramientas de administración para la gestión del estudio.
 
-🚀 Stack
-React 18
-Vite
-Tailwind CSS
-Motion (Framer Motion fork)
-Lucide Icons
-Backend API (Node / Express o similar)
-Mercado Pago (Sandbox + producción simulada)
-LocalStorage para sesión y estado persistente
+---
 
-🧠 Arquitectura del proyecto
+# 🚀 Tecnologías
 
-El proyecto está en proceso de refactorización desde una arquitectura monolítica hacia una modular:
+- React 19
+- Vite
+- Tailwind CSS v4
+- Motion (Framer Motion)
+- Lucide React
+- JavaScript (ES6+)
+- Backend API (Node.js / Express)
+- Vimeo API
+- Mercado Pago (Sandbox)
+- LocalStorage
 
+---
+
+# ✨ Funcionalidades
+
+## 🎬 Streaming
+
+- Catálogo de producciones audiovisuales
+- Reproducción de películas y cortometrajes
+- Contenido bloqueado mediante sistema de compra
+- Integración con Vimeo
+
+---
+
+## 💳 Sistema de pagos
+
+- Checkout mediante backend
+- Integración con Mercado Pago
+- Simulador Sandbox para desarrollo
+- Desbloqueo automático del contenido adquirido
+
+---
+
+## 🛒 Tienda de merchandising
+
+- Catálogo de productos
+- Carrito de compras
+- Checkout integrado
+- Persistencia del carrito
+
+---
+
+## 🧾 Blog
+
+- Publicación de artículos
+- Contenido relacionado con producciones audiovisuales
+- Navegación independiente
+
+---
+
+## 🔐 Autenticación
+
+- Login mediante email
+- Persistencia de sesión con LocalStorage
+- Restauración automática de sesión
+
+---
+
+## 🧪 Dev Console
+
+Herramienta interna para desarrollo que permite visualizar:
+
+- eventos del sistema
+- compras
+- reproducciones
+- errores
+- integraciones con API
+
+---
+
+# 🎨 Sistema de temas
+
+El proyecto implementa un sistema de temas utilizando variables CSS y Tailwind CSS.
+
+Actualmente dispone de tres modos:
+
+- 🌙 Dark
+- ☀️ Light
+- 🎬 Capsula (Brand)
+
+El tema seleccionado se guarda automáticamente en LocalStorage y puede cambiarse desde la interfaz de usuario.
+
+---
+
+# 🧠 Arquitectura
+
+El proyecto continúa evolucionando hacia una arquitectura modular.
+
+Actualmente la lógica se encuentra distribuida en:
+
+```
 src/
- ├── components/
- ├── pages/
- ├── hooks/
- ├── App.jsx (en proceso de limpieza)
- ├── services/
- 
-✨ Features principales
+│
+├── components/
+├── pages/
+├── hooks/
+├── services/
+├── styles/
+├── data/
+└── App.jsx
+```
 
-🎬 Streaming de películas
-Catálogo de producciones
-Reproducción de contenido desbloqueado
-Sistema de bloqueo por pago
+Durante la refactorización se fueron separando responsabilidades desde un único componente principal hacia componentes reutilizables, páginas y hooks personalizados.
 
-💳 Sistema de pagos
-Integración con backend /api/checkout
-Flujo con Mercado Pago real y sandbox
-Simulación de pago en entorno de pruebas
-Desbloqueo automático de contenido
+Hooks implementados:
 
-🛒 Carrito de compras
-Gestión de productos de merchandising
-Checkout combinado
-Persistencia de estado
+- useMovies
+- useCart
+- useAuth
+- useContent
+- useContact
+- useDevConsole
+- useTheme
 
-🧾 Blog de producción
-Artículos de cine y producción audiovisual
-Contenido editorial del estudio
+---
 
-👕 Merchandising
-Tienda integrada
-Agregado al carrito
-Categorías de productos
+# 💳 Flujo de compra
 
-🔐 Autenticación simulada
-Login con email
-Persistencia en LocalStorage
-Sesión restaurada automáticamente
+1. El usuario selecciona una película o producto.
+2. Se ejecuta `triggerCheckout()`.
+3. El backend genera la preferencia de pago.
+4. Se redirige al checkout.
+5. Al finalizar el pago:
+   - se registra la transacción;
+   - se desbloquea el contenido;
+   - se actualiza la interfaz.
 
-🧪 Dev Console interna
-Registro de eventos del sistema
-Logs de:
-compras
-reproducción de contenido
-errores de backend
-acciones de usuario
+---
 
-🧩 Estructura actual (refactor en progreso)
+# 🔐 Persistencia
 
-El App.jsx está siendo dividido en:
+El proyecto utiliza LocalStorage para almacenar:
 
-Antes:
-2600+ líneas monolíticas
-Ahora:
-componentes UI separados
-páginas por sección
-hooks de lógica
-En proceso de migración:
-useCart
-useMovies
-useAuth
-useDevConsole
-CheckoutSandbox
-ProductionsPage
-BlogPage
-MerchPage
+- usuario autenticado
+- contenido desbloqueado
+- carrito de compras
+- tema seleccionado
 
-💳 Flujo de pago
-Usuario selecciona película o producto
-Se ejecuta triggerCheckout()
-Backend genera preferencia (/api/checkout)
-Se redirige a:
-Mercado Pago real, o
-Sandbox interno (CheckoutSandbox)
-En pago exitoso:
-se desbloquea contenido
-se registra transacción
-se actualiza UI
+---
 
-🔐 Persistencia
+# 📦 Instalación
 
-Se utiliza localStorage para:
+Clonar el repositorio:
 
-usuario logueado
-contenido desbloqueado
-estado de sesión
+```bash
+git clone <repositorio>
+```
 
-🧪 Sandbox de pagos
+Instalar dependencias:
 
-El proyecto incluye un simulador visual de checkout:
+```bash
+pnpm install
+```
 
-UI estilo Mercado Pago
-simulación de tarjeta
-delay de procesamiento
-webhook simulado interno
-desbloqueo automático de contenido
+Iniciar el proyecto:
 
-📦 Instalación
+```bash
+pnpm dev
+```
+
+También es posible utilizar npm:
+
+```bash
 npm install
 npm run dev
+```
 
-🛠️ Backend requerido
+---
 
-El frontend espera estos endpoints:
+# 🛠️ Backend esperado
 
-GET  /api/movies
-GET  /api/admin/transactions
-POST /api/reviews
-POST /api/checkout
-POST /api/webhook
-GET  /api/vimeo/:id
+El frontend consume una API compatible con los siguientes endpoints:
 
-📌 Estado del proyecto
+```
+GET    /api/movies
+GET    /api/admin/transactions
+GET    /api/vimeo/:id
 
-🟡 En refactor activo
+POST   /api/reviews
+POST   /api/checkout
+POST   /api/webhook
+```
 
-UI funcional
-arquitectura en separación progresiva
-App.jsx aún en reducción
-lógica migrando a hooks y pages
+---
 
-🎯 Próximos pasos
-Finalizar separación de App.jsx
-Modularizar modales (video player / cart)
-Centralizar estado de checkout
-Mejorar backend contract (tipado / validación)
-Optimizar performance de renders
+# 📌 Estado del proyecto
 
-👨‍💻 Notas
+🟡 En desarrollo activo
 
-Este proyecto está diseñado como plataforma real de streaming + ecommerce híbrido, con foco en:
+Actualmente se encuentra en proceso de mejora continua.
 
-UX cinematográfica
-monetización de contenido digital
-arquitectura escalable
+Se han completado importantes tareas de refactorización:
+
+- separación de componentes
+- hooks personalizados
+- organización por páginas
+- integración con Vimeo
+- sistema de temas
+- centralización de estilos mediante variables CSS
+
+El proyecto continúa evolucionando hacia una arquitectura más escalable y mantenible.
+
+---
+
+# 🎯 Próximos pasos
+
+- Continuar reduciendo responsabilidades de App.jsx
+- Mejorar la organización del estado global
+- Optimizar componentes reutilizables
+- Continuar la integración con el backend
+- Incorporar nuevas funcionalidades administrativas
+
+---
+
+# 👨‍💻 Objetivo del proyecto
+
+Capsula Estudios busca simular una plataforma moderna de streaming y distribución audiovisual, combinando reproducción de contenido digital, comercio electrónico y herramientas de gestión en una única aplicación desarrollada con tecnologías actuales del ecosistema React.

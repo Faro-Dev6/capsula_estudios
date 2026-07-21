@@ -29,13 +29,13 @@ export default function CartDrawer({
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.3 }}
-            className="fixed right-0 top-0 h-screen w-full max-w-md bg-[#161616] border-l border-[#222] text-[#F5F5F5] z-50 p-6 flex flex-col justify-between shadow-2xl"
+            className="fixed right-0 top-0 h-screen w-full max-w-md bg-surface border-l border-border text-foreground z-50 p-6 flex flex-col justify-between shadow-2xl"
           >
             {/* HEADER */}
             <div>
-              <div className="flex items-center justify-between pb-6 border-b border-[#222] mb-6">
-                <h3 className="text-lg font-bold uppercase tracking-wider font-mono flex items-center gap-2 text-white">
-                  <ShoppingCart className="w-5 h-5 text-[#9D0208]" />
+              <div className="flex items-center justify-between pb-6 border-b border-border mb-6">
+                <h3 className="text-lg font-bold uppercase tracking-wider font-mono flex items-center gap-2 text-foreground">
+                  <ShoppingCart className="w-5 h-5 text-primary" />
                   Tu Pedido
                 </h3>
 
@@ -46,8 +46,8 @@ export default function CartDrawer({
 
               {/* EMPTY */}
               {cart.length === 0 ? (
-                <div className="text-center py-12 text-[#8E8E8E] space-y-4">
-                  <ShoppingCart className="w-12 h-12 mx-auto text-[#333]" />
+                <div className="text-center py-12 text-foreground-muted space-y-4">
+                  <ShoppingCart className="w-12 h-12 mx-auto text-border-muted" />
                   <p className="text-xs">
                     Tu bolsa de compras cinematográficas está vacía actualmente.
                   </p>
@@ -57,7 +57,7 @@ export default function CartDrawer({
                       setIsCartOpen(false);
                       setCurrentTab("merch");
                     }}
-                    className="px-4 py-2 bg-[#9D0208] text-white rounded text-xs"
+                    className="px-4 py-2 bg-primary text-white rounded text-xs"
                   >
                     Explorar la Tienda
                   </button>
@@ -67,7 +67,7 @@ export default function CartDrawer({
                   {cart.map((c) => (
                     <div
                       key={c.item.id}
-                      className="flex gap-4 p-3 bg-black/45 border border-[#2d2d2d] rounded-xl relative"
+                      className="flex gap-4 p-3 bg-black/45 border border-border-muted rounded-xl relative"
                     >
                       <img
                         src={c.item.image}
@@ -80,7 +80,7 @@ export default function CartDrawer({
                           {c.item.name}
                         </h4>
 
-                        <span className="text-[11px] text-[#D4AF37] block mt-1">
+                        <span className="text-[11px] text-accent block mt-1">
                           ${c.item.price.toLocaleString("es-AR")} ARS
                         </span>
 
@@ -121,24 +121,24 @@ export default function CartDrawer({
 
             {/* FOOTER */}
             {cart.length > 0 && (
-              <div className="border-t border-[#222] pt-6 space-y-4">
+              <div className="border-t border-border pt-6 space-y-4">
                 <div className="flex justify-between">
                   <span className="text-xs">Subtotal:</span>
-                  <span className="text-2xl text-[#D4AF37]">
+                  <span className="text-2xl text-accent">
                     ${cartTotal.toLocaleString("es-AR")} ARS
                   </span>
                 </div>
 
                 <button
                   onClick={handleCheckoutCart}
-                  className="w-full py-3 bg-[#9D0208] text-white text-xs uppercase"
+                  className="w-full py-3 bg-primary text-white text-xs uppercase"
                 >
                   Comprar por Mercado Pago
                 </button>
 
                 <button
                   onClick={clearCart}
-                  className="w-full py-2 text-xs text-[#8E8E8E]"
+                  className="w-full py-2 text-xs text-foreground-muted"
                 >
                   Vaciar Carrito
                 </button>

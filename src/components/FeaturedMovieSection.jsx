@@ -9,9 +9,9 @@ export default function FeaturedMovieSection({
 
   return (
     <section className="max-w-7xl mx-auto px-6 py-20">
-      <div className="flex flex-col lg:flex-row items-stretch bg-[#161616]/60 border border-[#222] rounded-2xl overflow-hidden shadow-2xl relative">
+      <div className="flex flex-col lg:flex-row items-stretch bg-surface/60 border border-border rounded-2xl overflow-hidden shadow-2xl relative">
 
-        <div className="absolute top-4 right-4 bg-black/70 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] uppercase font-mono tracking-widest px-3 py-1 rounded font-bold">
+        <div className="absolute top-4 right-4 bg-black/70 border border-accent/30 text-accent text-[10px] uppercase font-mono tracking-widest px-3 py-1 rounded font-bold">
           Estreno Exclusivo
         </div>
 
@@ -23,23 +23,23 @@ export default function FeaturedMovieSection({
             alt="Mision Delta"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#050505] via-transparent to-transparent opacity-80" />
+          <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-background via-transparent to-transparent opacity-80" />
         </div>
 
         {/* Info */}
         <div className="w-full lg:w-3/5 p-8 lg:p-12 flex flex-col justify-between">
 
           <div>
-            <span className="text-xs text-[#9D0208] tracking-widest uppercase font-mono font-bold block mb-2">
+            <span className="text-xs text-primary tracking-widest uppercase font-mono font-bold block mb-2">
               Largometraje Destacado
             </span>
 
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground mb-4">
               Mision Delta
             </h2>
 
-            <div className="flex flex-wrap items-center gap-4 text-xs text-[#8E8E8E] mb-6">
-              <span className="bg-[#9D0208]/10 text-[#9D0208] border border-[#9D0208]/20 px-2 py-0.5 rounded font-bold font-mono">
+            <div className="flex flex-wrap items-center gap-4 text-xs text-foreground-muted mb-6">
+              <span className="bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded font-bold font-mono">
                 Suspenso
               </span>
 
@@ -48,27 +48,27 @@ export default function FeaturedMovieSection({
               </span>
 
               <span className="flex items-center gap-1">
-                <Star className="w-3.5 h-3.5 text-[#D4AF37] fill-[#D4AF37]" />{" "}
+                <Star className="w-3.5 h-3.5 text-accent fill-accent" />{" "}
                 4.9 Puntos
               </span>
 
               <span>2024</span>
             </div>
 
-            <p className="text-sm text-[#8E8E8E] leading-relaxed mb-6">
+            <p className="text-sm text-foreground-muted leading-relaxed mb-6">
               Un grupo de élite se dirige a una zona desconocida en el Delta para rescatar a la hija de un corporativo. Al llegar al lugar, se dan cuenta de que algo muy extraño y oscuro está sucediendo, un lugar donde la realidad se escapa entre sus manos.
             </p>
 
-            <div className="border-t border-[#222] pt-6 mb-6">
+            <div className="border-t border-border pt-6 mb-6">
               <div className="grid grid-cols-2 gap-4 text-xs">
                 <div>
-                  <span className="text-[#8E8E8E] block">Director</span>
-                  <span className="text-white font-semibold">Joaquín Ramírez, Nahuel Bande</span>
+                  <span className="text-foreground-muted block">Director</span>
+                  <span className="text-foreground font-semibold">Joaquín Ramírez, Nahuel Bande</span>
                 </div>
 
                 <div>
-                  <span className="text-[#8E8E8E] block">Elenco</span>
-                  <span className="text-white font-semibold">
+                  <span className="text-foreground-muted block">Elenco</span>
+                  <span className="text-foreground font-semibold">
                     Emma Escalante, Joaquín Ramírez
                   </span>
                 </div>
@@ -83,7 +83,7 @@ export default function FeaturedMovieSection({
               onClick={() => {
                 if (target) handlePlayMovie(target);
               }}
-              className="w-full sm:w-auto px-6 py-3 bg-[#9D0208] hover:bg-[#b0030a] text-white text-xs tracking-wider uppercase font-bold rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full sm:w-auto px-6 py-3 bg-primary hover:bg-primary-hover text-white text-xs tracking-wider uppercase font-bold rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <Play className="w-4 h-4 fill-white" /> Reproducir Película
             </button>
@@ -92,7 +92,7 @@ export default function FeaturedMovieSection({
               onClick={() => {
                 if (target) setSelectedMovie(target);
               }}
-              className="w-full sm:w-auto px-6 py-3 bg-[#161616] hover:bg-[#222] text-white border border-[#2d2d2d] text-xs tracking-wider uppercase font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full sm:w-auto px-6 py-3 bg-surface hover:bg-surface-hover text-text border border-border-muted text-xs tracking-wider uppercase font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <Info className="w-4 h-4" /> Ver Detalles Clave
             </button>
