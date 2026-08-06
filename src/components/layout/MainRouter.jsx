@@ -27,6 +27,16 @@ export default function MainRouter({
   contact,
   // reviewsForm,
   addLog,
+  userEmail,
+  loginEmail,
+  setLoginEmail,
+  loginPassword,
+  setLoginPassword,
+  loginError,
+  loginSuccess,
+  handleLoginSubmit,
+  handleLogout,
+  currentUser,
 }) {
   return (
     <main className="pt-20">
@@ -70,6 +80,7 @@ export default function MainRouter({
           handlePlayMovie={handlePlayMovie}
           triggerCheckout={triggerCheckout}
           setSelectedMovie={setSelectedMovie}
+          currentUser={currentUser}
         />
       )}
 
@@ -90,7 +101,15 @@ export default function MainRouter({
       {/* ---------- LOGIN ---------- */}
       {currentTab === "login" && (
         <LoginSection
-          // {...reviewsForm.login}
+          userEmail={userEmail}
+          loginEmail={loginEmail}
+          setLoginEmail={setLoginEmail}
+          loginPassword={loginPassword}
+          setLoginPassword={setLoginPassword}
+          loginError={loginError}
+          loginSuccess={loginSuccess}
+          handleLoginSubmit={handleLoginSubmit}
+          handleLogout={handleLogout}
           setCurrentTab={setCurrentTab}
         />
       )}

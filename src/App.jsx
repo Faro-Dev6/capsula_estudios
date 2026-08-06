@@ -25,6 +25,7 @@ import DevConsole from "./components/DevConsole";
 import MainRouter from "./components/layout/MainRouter";
 import merchItems from "./data/merchItems";
 import CheckoutSandbox from "./components/CheckoutSandbox";
+import { freeUser } from "./data/currentUser";
 
 export default function App() {
   // ========================
@@ -36,6 +37,7 @@ export default function App() {
   const [activeSandboxUrl, setActiveSandboxUrl] = useState(null);
   const [sandboxItemTitle, setSandboxItemTitle] = useState("");
   const [sandboxPrice, setSandboxPrice] = useState(0);
+  const [currentUser, setCurrentUser] = useState (freeUser);
   
   const { theme, nextTheme } = useTheme();
 
@@ -117,7 +119,7 @@ export default function App() {
     setUnlockedMovies,
     unlockMovieLocal,
     handlePlayMovie,
-  } = useMovies({ addLog });
+  } = useMovies({ addLog, currentUser, });
 
   const {
     cart,
@@ -143,7 +145,7 @@ export default function App() {
     loginSuccess,
     handleLoginSubmit,
     handleLogout,
-  } = useAuth({ addLog });
+  } = useAuth({ addLog , setCurrentUser,});
 
   const contact = useContact({ addLog });
 
@@ -231,9 +233,20 @@ export default function App() {
         merchItems={merchItems}
         addToCart={addToCart}
         contact={contact}
-        // reviewsForm={reviewsForm}
         addLog={addLog}
-      />
+
+        userEmail={userEmail}
+        loginEmail={loginEmail}
+        setLoginEmail={setLoginEmail}
+        loginPassword={loginPassword}
+        setLoginPassword={setLoginPassword}
+        loginError={loginError}
+        loginSuccess={loginSuccess}
+        handleLoginSubmit={handleLoginSubmit}
+        handleLogout={handleLogout}
+        currentUser={currentUser}
+        />
+      
 
       <CartDrawer
         isCartOpen={isCartOpen}
@@ -254,6 +267,7 @@ export default function App() {
         setCinemaMode={setCinemaMode}
         handlePlayMovie={handlePlayMovie}
         triggerCheckout={triggerCheckout}
+        currentUser={currentUser}
       />
 
       {/* ================= VIDEO PLAYER ================= */}

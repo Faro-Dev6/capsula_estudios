@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
+import{
+  freeUser,
+  standardUser,
+  premiumUser,
+  
+} from "../data/currentUser";
 
-export default function useAuth({ addLog }) {
+export default function useAuth({ addLog, setCurrentUser }) {
   const [userEmail, setUserEmail] = useState(null);
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -32,6 +38,18 @@ export default function useAuth({ addLog }) {
 
     setLoginError("");
     setLoginSuccess(true);
+
+        if (loginEmail === "demo@capsula.com") {
+      setCurrentUser(freeUser);
+    } else if (loginEmail === "standard@capsula.com") {
+      setCurrentUser(standardUser);
+      console.log("despues del login:",standardUser.subscription);
+    } else if (loginEmail === "premium@capsula.com") {
+      setCurrentUser(premiumUser);
+    } else {
+      setCurrentUser(freeUser);
+    }
+    console.log("Usuario actual:", freeUser,standardUser,premiumUser);
 
     localStorage.setItem("capsulastudios_user", loginEmail);
     setUserEmail(loginEmail);

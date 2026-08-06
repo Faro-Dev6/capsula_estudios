@@ -1,6 +1,9 @@
 import React from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Play, Lock, Unlock, X } from "lucide-react";
+import { Play, Lock, Unlock, X, Heart } from "lucide-react";
+import { canUserWatchMovie, CONTENT } from "../services/access.service";
+import { useState } from "react";
+import {MessageSquare} from "lucide-react";
 
 export default function MovieModal({
   selectedMovie,
@@ -8,7 +11,34 @@ export default function MovieModal({
   unlockedMovies,
   handlePlayMovie,
   triggerCheckout,
+  currentUser,
 }) {
+  const [review, setReview] = useState("");
+
+  const access = selectedMovie
+    ? canUserWatchMovie({
+        movie: selectedMovie,
+        user: currentUser,
+        rentedMovies: currentUser?.rentals ?? [] ,
+      })
+    : null;
+  const handleReview = () => {
+    if (!review.trim()) return;
+
+  const reviewData = {
+    movieId: selectedMovie.id,
+    user: currentUser.email,
+    comment: review,
+    createdAt: new Date().toISOString(),
+  };
+
+  currentUser.reviews.push(reviewData);
+  selectedMovie.reviews.push(reviewData);
+
+  setReview("");
+};
+
+
   return (
     <AnimatePresence>
       {selectedMovie && (
@@ -29,11 +59,24 @@ export default function MovieModal({
           >
 
             {/* CLOSE */}
+            
             <button
               onClick={() => setSelectedMovie(null)}
               className="absolute top-4 right-4 p-2 bg-black/60 rounded-full text-white hover:text-primary transition z-10"
             >
               <X className="w-4 h-4" />
+            </button>
+
+            {/* FAVORITOS */}
+            <button
+              onClick={() => {
+                if (!currentUser.favoriteMovies.includes(selectedMovie.id)) {
+                  currentUser.favoriteMovies.push(selectedMovie.id);
+                }
+              }}
+              className="absolute top-4 right-16 p-2 bg-black/60 rounded-full text-red-500 hover:text-red-400 transition z-10"
+            >
+              <Heart className="w-4 h-4" />
             </button>
 
             {/* HEADER IMAGE */}
@@ -80,52 +123,131 @@ export default function MovieModal({
 
                 {/* PRICE / STATUS */}
                 <div>
-                  {unlockedMovies.includes(selectedMovie.id) || selectedMovie.price === 0 ? (
-                    <span className="text-emerald-400 text-xs flex items-center gap-1 font-bold">
-                      <Unlock className="w-3.5 h-3.5" />
-                      Acceso desbloqueado
+                {access?.allowed ? (
+                  <span className="text-emerald-400 text-xs flex items-center gap-1 font-bold">
+                    <Unlock className="w-3.5 h-3.5" />
+                    Disponible
+                  </span>
+                ) : selectedMovie.contentType === CONTENT.PREMIERE ? (
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-foreground-muted uppercase">
+                      Exclusivo
                     </span>
-                  ) : (
-                    <div className="flex flex-col">
-                      <span className="text-[10px] text-foreground-muted uppercase">
-                        Alquiler digital
-                      </span>
+                    <span className="text-lg font-mono text-yellow-400 font-bold">
+                      Premium
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-foreground-muted uppercase">
+                      Alquiler 24 hs
+                    </span>
+
+                    {selectedMovie.rentalPrice != null ? (
                       <span className="text-lg font-mono text-accent font-bold">
-                        ${selectedMovie.price.toLocaleString("es-AR")} ARS
+                        ${selectedMovie.rentalPrice.toLocaleString("es-AR")} ARS
                       </span>
-                    </div>
-                  )}
+                    ) : (
+                      <span className="text-lg font-bold text-emerald-400">
+                        Gratis
+                      </span>
+                    )}
+                  </div>
+                )}
+                </div>
+                <div className="border-t border-border mt-6 pt-6 space-y-3">
+
+                <div className="flex items-center gap-2 text-sm font-semibold">
+                  <MessageSquare className="w-4 h-4" />
+                  Reseñas
                 </div>
 
-                {/* BUTTON */}
-                {unlockedMovies.includes(selectedMovie.id) || selectedMovie.price === 0 ? (
-                  <button
-                    onClick={() => {
-                      handlePlayMovie(selectedMovie);
-                      setSelectedMovie(null);
-                    }}
-                    className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs uppercase font-bold flex items-center gap-2"
-                  >
-                    <Play className="w-3.5 h-3.5" />
-                    Reproducir
-                  </button>
+                {access?.allowed ? (
+                  <>
+                    <textarea
+                      value={review}
+                      onChange={(e) => setReview(e.target.value)}
+                      placeholder="Escribe una reseña..."
+                      className="w-full min-h-24 rounded-lg bg-background border border-border p-3 text-sm outline-none"
+                    />
+
+                    <button
+                      onClick={handleReview}
+                      className="px-4 py-2 rounded bg-primary text-white text-xs uppercase font-bold"
+                    >
+                      Publicar reseña
+                    </button>
+                  </>
                 ) : (
-                  <button
-                    onClick={() => {
-                      triggerCheckout(
-                        selectedMovie.title,
-                        selectedMovie.price,
-                        false,
-                        selectedMovie.id
-                      );
-                      setSelectedMovie(null);
-                    }}
-                    className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded text-xs uppercase font-bold flex items-center gap-2"
-                  >
-                    <Lock className="w-3.5 h-3.5 text-accent" />
-                    Alquilar
-                  </button>
+                  <div className="rounded-lg border border-border bg-background p-3 text-sm text-foreground-muted">
+                    Debes tener acceso al contenido para publicar una reseña.
+                  </div>
                 )}
+                {selectedMovie.reviews.length > 0 && (
+                  <div className="space-y-3 pt-4">
+
+                    {selectedMovie.reviews.map((review, index) => (
+                      <div
+                        key={index}
+                        className="rounded-lg border border-border bg-background p-3"
+                      >
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="font-semibold text-sm">
+                            {review.user}
+                          </span>
+
+                          <span className="text-xs text-foreground-muted">
+                            {review.createdAt
+                            ? new Date (review.createdAt).toLocaleDateString()
+                            : "-"}
+                          </span>
+                        </div>
+
+                        <p className="text-sm text-foreground-muted">
+                          {review.comment}
+                        </p>
+                      </div>
+                    ))}
+
+                  </div>
+                )}
+
+              </div>
+                {/* BUTTON */}
+                {access?.allowed ? (
+                <button
+                  onClick={() => {
+                    handlePlayMovie(selectedMovie);
+                    setSelectedMovie(null);
+                  }}
+                  className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs uppercase font-bold flex items-center gap-2"
+                >
+                  <Play className="w-3.5 h-3.5" />
+                  Ver ahora
+                </button>
+              ) : selectedMovie.contentType === CONTENT.PREMIERE ? (
+                <button
+                  className="px-5 py-2.5 bg-yellow-600 hover:bg-yellow-500 text-white rounded text-xs uppercase font-bold"
+                >
+                  Premium
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    triggerCheckout(
+                      selectedMovie.title,
+                      selectedMovie.price,
+                      false,
+                      selectedMovie.id
+                    );
+                    setSelectedMovie(null);
+                  }}
+                  className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded text-xs uppercase font-bold flex items-center gap-2"
+                >
+                  <Lock className="w-3.5 h-3.5" />
+                  Alquilar
+                </button>
+              )}
 
               </div>
             </div>

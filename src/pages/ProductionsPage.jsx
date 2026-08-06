@@ -5,6 +5,8 @@ import {
   Unlock,
   Info
 } from "lucide-react";
+import {CONTENT, SUBSCRIPTIONS} from "../services/access.service";
+import {canUserWatchMovie} from "../services/access.service";
 
 export default function ProductionsPage({
   movies,
@@ -13,7 +15,8 @@ export default function ProductionsPage({
   unlockedMovies,
   handlePlayMovie,
   triggerCheckout,
-  setSelectedMovie
+  setSelectedMovie,
+  currentUser,
 }) {
 
   // ✅ función única para checkout (sin cambiar lógica)
@@ -65,12 +68,23 @@ export default function ProductionsPage({
           .filter(
             (m) =>
               movieFilter === "todos" ||
-              m.type === movieFilter
+              (movieFilter === "pelicula" && m.contentType === CONTENT.MOVIE) ||
+              (movieFilter === "corto" && m.contentType === CONTENT.SHORT)
           )
           .map((movie) => {
-            const isUnlocked =
-              unlockedMovies.includes(movie.id) ||
-              movie.price === 0;
+            const access = canUserWatchMovie({
+            movie,
+            user: currentUser,
+            rentedMovies: currentUser?.rentals ?? [],
+          });
+          console.log(
+            movie.title,
+            currentUser.SUBSCRIPTIONS,
+            access.allowed,
+          )
+
+          const isUnlocked =
+            access.allowed || unlockedMovies.includes(movie.id);
 
             return (
               <motion.div
@@ -115,9 +129,15 @@ export default function ProductionsPage({
                           Un solo pago de
                         </span>
 
-                        <span className="text-xl text-white font-mono font-bold">
-                          ${movie.price.toLocaleString("es-AR")} ARS
-                        </span>
+                        {movie.rentalPrice != null ? (
+                          <span className="text-xl text-white font-mono font-bold">
+                            ${movie.rentalPrice.toLocaleString("es-AR")} ARS
+                          </span>
+                        ) : (
+                          <span className="text-xl font-bold text-emerald-400">
+                            Gratis
+                          </span>
+                        )}
 
                         <button
                           onClick={() => handleCheckout(movie)}
@@ -134,7 +154,7 @@ export default function ProductionsPage({
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-1">
                       <span className="text-[10px] text-accent tracking-widest uppercase font-mono font-bold">
-                        {movie.type === "pelicula"
+                        {movie.contentType === CONTENT.MOVIE
                           ? "Largometraje"
                           : "Cortometraje"}
                       </span>

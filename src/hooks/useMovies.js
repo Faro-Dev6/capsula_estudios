@@ -1,6 +1,7 @@
 import { useState } from "react";
+import {canUserWatchMovie,ACCESS} from "../services/access.service";
 
-export default function useMovies({ addLog }) {
+export default function useMovies({ addLog, currentUser }) {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [activeVideo, setActiveVideo] = useState(null);
   const [vimeoDetails, setVimeoDetails] = useState(null);
@@ -16,24 +17,34 @@ export default function useMovies({ addLog }) {
     addLog?.(`Película desbloqueada: ${movieId}`);
   };
 
-  const handlePlayMovie = (movie) => {
-    const isUnlocked =
-      movie.accessType === "free" || unlockedMovies.includes(movie.id);
+const handlePlayMovie = (movie) => {
+  const result = canUserWatchMovie({
+    movie,
+    user: currentUser,
+    rentedMovies: currentUser.rentals,
+  });
 
-    if (!isUnlocked) {
-      addLog?.(`Intento de reproducción bloqueado: ${movie.title}`);
-      setSelectedMovie(movie);
-      return;
-    }
+  if (!result.allowed) {
+    addLog?.(`Acceso denegado: ${movie.title}`);
+    setSelectedMovie(movie);
+    return;
+  }
 
-    setActiveVideo(movie);
+    currentUser.history.push({
+    movieId: movie.id,
+    watchedAt: new Date().toISOString(),
+    completed: false,
+    progress: 0,
+});
 
-    if (movie.vimeoId) {
-      fetchVimeo(movie.vimeoId);
-    }
+setActiveVideo(movie);
 
-    addLog?.(`Reproduciendo: ${movie.title}`);
-  };
+if (movie.vimeoId) {
+  fetchVimeo(movie.vimeoId);
+}
+
+addLog?.(`Reproduciendo: ${movie.title}`);
+};
 
   const fetchVimeo = async (vimeoId) => {
     setVimeoLoading(true);
