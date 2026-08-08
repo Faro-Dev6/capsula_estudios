@@ -43,7 +43,7 @@ export default function useAuth({ addLog, setCurrentUser }) {
       setCurrentUser(freeUser);
     } else if (loginEmail === "standard@capsula.com") {
       setCurrentUser(standardUser);
-      console.log("despues del login:",standardUser.subscription);
+      
     } else if (loginEmail === "premium@capsula.com") {
       setCurrentUser(premiumUser);
     } else {

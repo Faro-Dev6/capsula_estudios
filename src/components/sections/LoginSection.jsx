@@ -2,6 +2,8 @@ import React from "react";
 import {
   CheckCircle,
   AlertTriangle,
+  History,
+  Crown,
 } from "lucide-react";
 
 export default function LoginSection({
@@ -13,8 +15,9 @@ export default function LoginSection({
   loginError,
   loginSuccess,
   handleLoginSubmit,
-  handleLogout,
   setCurrentTab,
+  currentUser,
+  movies,
 }) {
   return (
     <section className="max-w-md mx-auto px-6 py-16">
@@ -25,40 +28,107 @@ export default function LoginSection({
           <h2 className="text-2xl font-black uppercase text-foreground tracking-tight">
             Acceso Cineasta
           </h2>
+
           <p className="text-xs text-foreground-muted mt-1">
-            Ingresa para administrar tus accesos y streaming digital.
+            Administra tu acceso y streaming digital.
           </p>
         </div>
 
         {userEmail ? (
-          <div className="text-center space-y-4 py-4">
-            <div className="w-12 h-12 rounded-full bg-emerald-700/20 border border-emerald-500/40 flex items-center justify-center mx-auto text-emerald-400">
-              <CheckCircle className="w-6 h-6" />
+          <div className="space-y-6">
+
+            {/* SESIÓN */}
+            <div className="text-center space-y-3">
+              <div className="w-12 h-12 rounded-full bg-emerald-700/20 border border-emerald-500/40 flex items-center justify-center mx-auto text-emerald-400">
+                <CheckCircle className="w-6 h-6" />
+              </div>
+
+              <p className="text-sm text-white font-medium">
+                Tienes una sesión activa como:
+              </p>
+
+              <p className="text-xs font-mono text-accent bg-black/50 py-2 px-3 rounded inline-block">
+                {userEmail}
+              </p>
             </div>
 
-            <p className="text-sm text-white font-medium">
-              Tienes una sesión activa como:
-            </p>
+            {/* SUSCRIPCIÓN */}
+            <div className="bg-background border border-border-muted rounded-xl p-4">
+              <div className="flex items-center gap-3 mb-3">
+                <Crown className="w-5 h-5 text-accent" />
 
-            <p className="text-xs font-mono text-accent bg-black/50 py-2 px-3 rounded inline-block">
-              {userEmail}
-            </p>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-foreground-muted">
+                    Suscripción actual
+                  </p>
 
-            <div className="pt-4 flex flex-col gap-2">
+                  <p className="text-sm font-bold text-white">
+                    {currentUser?.subscription || "FREE"}
+                  </p>
+                </div>
+              </div>
+
               <button
-                onClick={() => setCurrentTab("producciones")}
+                type="button"
                 className="w-full py-2.5 bg-primary hover:bg-primary-hover text-white text-xs uppercase font-semibold tracking-widest rounded-lg transition-colors cursor-pointer"
               >
-                Ir al Catálogo
-              </button>
-
-              <button
-                onClick={handleLogout}
-                className="w-full py-2.5 bg-black hover:bg-zinc-900 border border-[#333] text-zinc-400 text-xs uppercase font-semibold tracking-widest rounded-lg transition-colors cursor-pointer"
-              >
-                Cerrar Sesión Activa
+                Cambiar Suscripción
               </button>
             </div>
+
+            {/* CATÁLOGO */}
+            <button
+              onClick={() => setCurrentTab("producciones")}
+              className="w-full py-2.5 bg-primary hover:bg-primary-hover text-white text-xs uppercase font-semibold tracking-widest rounded-lg transition-colors cursor-pointer"
+            >
+              Ir al Catálogo
+            </button>
+
+            {/* HISTORIAL */}
+            <div className="border-t border-border/50 pt-5">
+              <div className="flex items-center gap-2 mb-4">
+                <History className="w-4 h-4 text-accent" />
+
+                <h3 className="text-xs uppercase tracking-widest font-bold text-white">
+                  Historial
+                </h3>
+              </div>
+
+              {currentUser?.history?.length > 0 ? (
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {currentUser.history
+                    .slice()
+                    .reverse()
+                    .map((item, index) => {
+                      const movie = movies?.find(
+                        (movie) => movie.id === item.movieId
+                      );
+
+                      return (
+                        <div
+                          key={`${item.movieId}-${index}`}
+                          className="bg-background border border-border-muted rounded-lg p-3"
+                        >
+                          <p className="text-xs font-semibold text-white">
+                            {movie?.title || `Película ${item.movieId}`}
+                          </p>
+
+                          <p className="text-[10px] text-foreground-muted mt-1">
+                            {new Date(item.watchedAt).toLocaleDateString(
+                              "es-AR"
+                            )}
+                          </p>
+                        </div>
+                      );
+                    })}
+                </div>
+              ) : (
+                <p className="text-[10px] text-foreground-muted text-center py-4">
+                  Todavía no has visto ninguna película.
+                </p>
+              )}
+            </div>
+
           </div>
         ) : (
           <form onSubmit={handleLoginSubmit} className="space-y-4">
@@ -79,6 +149,7 @@ export default function LoginSection({
               <label className="block text-xs uppercase tracking-wider text-foreground-muted mb-1 font-mono">
                 Email
               </label>
+
               <input
                 type="email"
                 required
@@ -93,6 +164,7 @@ export default function LoginSection({
               <label className="block text-xs uppercase tracking-wider text-foreground-muted mb-1 font-mono">
                 Contraseña
               </label>
+
               <input
                 type="password"
                 required
@@ -113,8 +185,7 @@ export default function LoginSection({
 
             <div className="pt-4 border-t border-border/50 text-center">
               <span className="text-[10px] text-foreground-muted">
-                ¿No tienes credenciales Supabase? Escribe cualquier correo para simular.
-                Acceso temporal libre habilitado para testing.
+                Acceso temporal habilitado para testing.
               </span>
             </div>
           </form>
